@@ -43,15 +43,58 @@ class MaibMiaClient extends GuzzleClient
         return parent::getToken($args);
     }
 
+    /**
+     * Create QR Code (Static, Dynamic)
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
+     */
     public function createQr($qrData, $authToken)
     {
         $qrData['authToken'] = $authToken;
 
-        // $args = [
-        //     'qrData' => $qrData,
-        //     'authToken' => $authToken
-        // ];
-
         return parent::createQr($qrData);
+    }
+
+    /**
+     * Callback Payload Signature Key Verification
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
+     * @param array  $callbackData
+     * @param string $signatureKey
+     */
+    public static function validateCallback($callbackData, $signatureKey)
+    {
+        $resultElement = $callbackData['result'] ?? [];
+        $expectedSignature = $callbackData['signature'] ?? '';
+
+        $keys = [];
+        foreach ($resultElement as $key => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+
+            // Format "amount" and "commission" with 2 decimal places
+            if ($key === 'amount' || $key === 'commission') {
+                $valueStr = number_format((float)$value, 2, '.', '');
+            } else {
+                $valueStr = (string)$value;
+            }
+
+            if (trim($valueStr) !== '') {
+                $keys[$key] = $valueStr;
+            }
+        }
+
+        // Sort keys by key name (case-insensitive)
+        uksort($keys, 'strcasecmp');
+
+        // Build the string to hash
+        $additionalString = implode(':', $keys);
+        $hashInput = $additionalString . ':' . $signatureKey;
+
+        // Generate SHA256 hash and base64-encode it
+        $hash = hash('sha256', $hashInput, true);
+        $result = base64_encode($hash);
+
+        // Compare the result with the signature
+        return hash_equals($expectedSignature, $result);
     }
 }

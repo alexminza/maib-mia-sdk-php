@@ -42,7 +42,6 @@ class MaibMiaDescription extends Description
                     'responseModel' => 'getResponse',
                     'parameters' => [
                         'authToken' => $authorizationHeader,
-                        // 'qrData' => ['location' => 'json'],
                         'type' => ['type' => 'string', 'location' => 'json', 'enum' => ['Static', 'Dynamic'], 'required' => true],
                         'expiresAt' => ['type' => 'string', 'format' => 'date-time', 'location' => 'json'],
                         'amountType' => ['type' => 'string', 'location' => 'json', 'enum' => ['Fixed', 'Controlled', 'Free'], 'required' => true],
