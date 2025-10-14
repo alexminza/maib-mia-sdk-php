@@ -1,5 +1,5 @@
 {
-    "name": "alexminza/maib-mia-sdk-php",
+    "name": "alexminza/maib-mia-sdk",
     "description": "PHP SDK for maib MIA API",
     "type": "library",
     "keywords": [
