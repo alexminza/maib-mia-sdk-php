@@ -49,9 +49,17 @@ class MaibMiaClient extends GuzzleClient
      */
     public function createQr($qrData, $authToken)
     {
-        $qrData['authToken'] = $authToken;
-
+        self::setBearerAuthToken($qrData, $authToken);
         return parent::createQr($qrData);
+    }
+
+    /**
+     * @param array $args
+     * @param string $authToken
+     */
+    private static function setBearerAuthToken($args, $authToken)
+    {
+        $args['authToken'] = "Bearer $authToken";
     }
 
     /**
@@ -60,7 +68,7 @@ class MaibMiaClient extends GuzzleClient
      * @param array  $callbackData
      * @param string $signatureKey
      */
-    public static function validateCallback($callbackData, $signatureKey)
+    public static function validateCallbackSignature($callbackData, $signatureKey)
     {
         $resultElement = $callbackData['result'] ?? [];
         $expectedSignature = $callbackData['signature'] ?? '';
