@@ -56,6 +56,17 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string', 'location' => 'json'],
                     ],
                 ],
+                'paymentRefund' => [
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/mia/payments/{payId}/refund',
+                    'description' => 'Refund Completed Payment',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'payId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                        'reason' => ['type' => 'string', 'location' => 'json', 'required' => true],
+                    ],
+                ],
             ],
 
             'models' => [

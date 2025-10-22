@@ -56,6 +56,18 @@ class MaibMiaClient extends GuzzleClient
     }
 
     /**
+     * Refund Completed Payment
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
+     * @param array @refundData
+     * @param string $authToken
+     */
+    public function paymentRefund($refundData, $authToken)
+    {
+        self::setBearerAuthToken($refundData, $authToken);
+        return parent::paymentRefund($refundData);
+    }
+
+    /**
      * @param array  $args
      * @param string $authToken
      */
