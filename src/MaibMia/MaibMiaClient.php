@@ -46,6 +46,8 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Create QR Code (Static, Dynamic)
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
+     * @param array  $qrData
+     * @param string $authToken
      */
     public function createQr($qrData, $authToken)
     {
@@ -54,10 +56,10 @@ class MaibMiaClient extends GuzzleClient
     }
 
     /**
-     * @param array $args
+     * @param array  $args
      * @param string $authToken
      */
-    private static function setBearerAuthToken($args, $authToken)
+    private static function setBearerAuthToken(&$args, $authToken)
     {
         $args['authToken'] = "Bearer $authToken";
     }
