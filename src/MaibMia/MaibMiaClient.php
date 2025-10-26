@@ -9,6 +9,10 @@ use GuzzleHttp\Command\Guzzle\GuzzleClient;
 use GuzzleHttp\Command\Result;
 use GuzzleHttp\Exception\BadResponseException;
 
+/**
+ * maib MIA API client
+ * @link https://docs.maibmerchants.md/mia-qr-api
+ */
 class MaibMiaClient extends GuzzleClient
 {
     const DEFAULT_BASE_URL = 'https://api.maibmerchants.md/';
@@ -33,6 +37,8 @@ class MaibMiaClient extends GuzzleClient
      * Obtain Authentication Token
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/authentication/obtain-authentication-token
      * @link https://docs.maibmerchants.md/mia-qr-api/en/overview/general-technical-specifications#authentication
+     * @param string $clientId
+     * @param string $clientSecret
      */
     public function getToken($clientId, $clientSecret)
     {
