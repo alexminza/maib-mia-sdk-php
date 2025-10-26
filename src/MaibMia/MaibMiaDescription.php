@@ -168,7 +168,7 @@ class MaibMiaDescription extends Description
                     ],
                 ],
 
-                // Payment Simulaion Operations
+                // Payment Simulation Operations
                 'testPay' => [
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/test-pay',

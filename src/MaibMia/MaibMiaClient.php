@@ -57,15 +57,153 @@ class MaibMiaClient extends GuzzleClient
     }
 
     /**
-     * Refund Completed Payment
-     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
-     * @param array @refundData
+     * Create Hybrid QR Code
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code
+     * @param array  $qrData
      * @param string $authToken
      */
-    public function paymentRefund($refundData, $authToken)
+    public function createHybridQr($qrData, $authToken)
     {
-        self::setBearerAuthToken($refundData, $authToken);
-        return parent::paymentRefund($refundData);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::createHybridQr($qrData);
+    }
+
+    /**
+     * Create Extension for QR Code by ID
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code/create-extension-for-qr-code-by-id
+     * @param string $qrId
+     * @param array  $qrData
+     * @param string $authToken
+     */
+    public function createQrExtension($qrId, $qrData, $authToken)
+    {
+        $args = $qrData;
+        $args['qrId'] = $qrId;
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::createQrExtension($args);
+    }
+
+    /**
+     * Cancel Active QR (Static, Dynamic)
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic
+     * @param string $qrId
+     * @param string $reason
+     * @param string $authToken
+     */
+    public function cancelQr($qrId, $reason, $authToken)
+    {
+        $args = [
+            'qrId' => $qrId,
+            'reason' => $reason,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::cancelQr($args);
+    }
+
+    /**
+     * Cancel Active QR Extension (Hybrid)
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid
+     * @param string $qrId
+     * @param string $reason
+     * @param string $authToken
+     */
+    public function cancelQrExtension($qrId, $reason, $authToken)
+    {
+        $args = [
+            'qrId' => $qrId,
+            'reason' => $reason,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::cancelQrExtension($args);
+    }
+
+    /**
+     * Refund Completed Payment
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
+     * @param string $payId
+     * @param string $reason
+     * @param string $authToken
+     */
+    public function paymentRefund($payId, $reason, $authToken)
+    {
+        $args = [
+            'payId' => $payId,
+            'reason' => $reason,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::paymentRefund($args);
+    }
+
+    /**
+     * Display List of QR Codes with Filtering Options
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
+     * @param array $qrListData
+     * @param string $authToken
+     */
+    public function qrList($qrListData, $authToken)
+    {
+        self::setBearerAuthToken($qrListData, $authToken);
+        return parent::qrList($qrListData);
+    }
+
+    /**
+     * Retrieve QR Details by ID
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
+     * @param string $qrId
+     * @param string $authToken
+     */
+    public function qrDetails($qrId, $authToken)
+    {
+        $args = [
+            'qrId' => $qrId,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::qrDetails($args);
+    }
+
+    /**
+     * Retrieve List of Payments with Filtering Options
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-list-of-payments-with-filtering-options
+     * @param array $paymentListData
+     * @param string $authToken
+     */
+    public function paymentList($paymentListData, $authToken)
+    {
+        self::setBearerAuthToken($paymentListData, $authToken);
+        return parent::paymentList($paymentListData);
+    }
+
+    /**
+     * Retrieve Payment Details by ID
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
+     * @param string $payId
+     * @param string $authToken
+     */
+    public function paymentDetails($payId, $authToken)
+    {
+        $args = [
+            'payId' => $payId,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::paymentDetails($args);
+    }
+
+    /**
+     * Payment Simulation (Sandbox)
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
+     * @param array $testPayData
+     * @param string $authToken
+     */
+    public function testPay($testPayData, $authToken)
+    {
+        self::setBearerAuthToken($testPayData, $authToken);
+        return parent::testPay($testPayData);
     }
 
     /**
