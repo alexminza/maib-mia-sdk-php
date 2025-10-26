@@ -54,7 +54,7 @@ $maibMiaClient = new MaibMiaClient($guzzleClient);
 ```
 
 ## SDK usage examples
-### Get Access Token with username and password
+### Get Access Token with Client ID and Client Secret
 
 ```php
 $tokenResponse = $maibMiaClient->getToken(MAIB_MIA_CLIENT_ID, MAIB_MIA_CLIENT_SECRET);
