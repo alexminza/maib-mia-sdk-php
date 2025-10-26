@@ -32,6 +32,7 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Obtain Authentication Token
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/authentication/obtain-authentication-token
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/overview/general-technical-specifications#authentication
      */
     public function getToken($clientId, $clientSecret)
     {
