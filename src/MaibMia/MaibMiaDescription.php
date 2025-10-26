@@ -130,7 +130,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ],
                     'additionalParameters' => [
-                        'location' => 'uri',
+                        'location' => 'query',
                         'schema' => ['$ref' => 'QrListDto']
                     ]
                 ],
@@ -153,7 +153,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ],
                     'additionalParameters' => [
-                        'location' => 'uri',
+                        'location' => 'query',
                         'schema' => ['$ref' => 'PaymentListDto']
                     ]
                 ],
