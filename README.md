@@ -71,7 +71,7 @@ $qr_data = array(
     'type' => 'Dynamic',
     'expiresAt' => $expiresAt,
     'amountType' => 'Fixed',
-    'amount' => 123.45,
+    'amount' => 50.00,
     'currency' => 'MDL',
     'description' => 'Order #123',
     'orderId' => '123',
@@ -116,10 +116,10 @@ print_r($validationResult);
 $qrId = $createQrResponse['result']['qrId'];
 $testPayData = [
     'qrId' => $qrId,
-    'amount' => 123.45,
+    'amount' => 50.00,
     'iban' => 'MD88AG000000011621810140',
     'currency' => 'MDL',
-    'payerName' => 'TEST'
+    'payerName' => 'TEST QR PAYMENT'
 ];
 
 $testPayResponse = $client->testPay($testPayData, $accessToken);
@@ -137,6 +137,6 @@ print_r($paymentDetailsResponse);
 ### Refund payment
 
 ```php
-$paymentRefundResponse = $client->paymentRefund($payId, 'TEST', $accessToken);
+$paymentRefundResponse = $client->paymentRefund($payId, 'Test refund reason', $accessToken);
 print_r($paymentRefundResponse);
 ```
