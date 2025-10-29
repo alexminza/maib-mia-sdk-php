@@ -21,23 +21,23 @@ use Maib\MaibMia\MaibMiaClient;
 Add project configuration:
 
 ```php
-const DEBUG = getenv('DEBUG');
+$DEBUG = getenv('DEBUG');
 
-const MAIB_MIA_BASE_URI = getenv('MAIB_MIA_BASE_URI');
-const MAIB_MIA_CLIENT_ID = getenv('MAIB_MIA_CLIENT_ID');
-const MAIB_MIA_CLIENT_SECRET = getenv('MAIB_MIA_CLIENT_SECRET');
-const MAIB_MIA_SIGNATURE_KEY = getenv('MAIB_MIA_SIGNATURE_KEY');
+$MAIB_MIA_BASE_URI = getenv('MAIB_MIA_BASE_URI');
+$MAIB_MIA_CLIENT_ID = getenv('MAIB_MIA_CLIENT_ID');
+$MAIB_MIA_CLIENT_SECRET = getenv('MAIB_MIA_CLIENT_SECRET');
+$MAIB_MIA_SIGNATURE_KEY = getenv('MAIB_MIA_SIGNATURE_KEY');
 ```
 
 Initialize client:
 
 ```php
 $options = [
-    'base_uri' => MAIB_MIA_BASE_URI,
+    'base_uri' => $MAIB_MIA_BASE_URI,
     'timeout' => 15
 ];
 
-if (DEBUG) {
+if ($DEBUG) {
     $logName = 'maib_mia_guzzle';
     $logFileName = "$logName.log";
 
@@ -58,7 +58,7 @@ $maibMiaClient = new MaibMiaClient($guzzleClient);
 ### Get Access Token with Client ID and Client Secret
 
 ```php
-$tokenResponse = $maibMiaClient->getToken(MAIB_MIA_CLIENT_ID, MAIB_MIA_CLIENT_SECRET);
+$tokenResponse = $maibMiaClient->getToken($MAIB_MIA_CLIENT_ID, $MAIB_MIA_CLIENT_SECRET);
 $accessToken = $tokenResponse['result']['accessToken'];
 ```
 
@@ -107,7 +107,7 @@ $callbackBody = '{
 }';
 
 $callbackData = json_decode($callbackBody, true);
-$validationResult = MaibMiaClient::validateCallbackSignature($callbackData, MAIB_MIA_SIGNATURE_KEY);
+$validationResult = MaibMiaClient::validateCallbackSignature($callbackData, $MAIB_MIA_SIGNATURE_KEY);
 print_r($validationResult);
 ```
 
