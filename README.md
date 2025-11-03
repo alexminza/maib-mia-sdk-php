@@ -1,4 +1,7 @@
 # PHP SDK for maib MIA API
+
+![maib MIA](https://repository-images.githubusercontent.com/1076179057/9258aa73-ca53-4f17-9ee4-08b5e068ef47)
+
 * maib MIA QR API docs: https://docs.maibmerchants.md/mia-qr-api
 * GitHub project https://github.com/alexminza/maib-mia-sdk-php
 * Composer package https://packagist.org/packages/alexminza/maib-mia-sdk
