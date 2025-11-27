@@ -39,6 +39,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/overview/general-technical-specifications#authentication
      * @param string $clientId
      * @param string $clientSecret
+     * @return \GuzzleHttp\Command\Result
      */
     public function getToken($clientId, $clientSecret)
     {
@@ -55,6 +56,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
      * @param array  $qrData
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function createQr($qrData, $authToken)
     {
@@ -67,6 +69,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code
      * @param array  $qrData
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function createHybridQr($qrData, $authToken)
     {
@@ -80,6 +83,7 @@ class MaibMiaClient extends GuzzleClient
      * @param string $qrId
      * @param array  $qrData
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function createQrExtension($qrId, $qrData, $authToken)
     {
@@ -96,6 +100,7 @@ class MaibMiaClient extends GuzzleClient
      * @param string $qrId
      * @param string $reason
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function cancelQr($qrId, $reason, $authToken)
     {
@@ -114,6 +119,7 @@ class MaibMiaClient extends GuzzleClient
      * @param string $qrId
      * @param string $reason
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function cancelQrExtension($qrId, $reason, $authToken)
     {
@@ -132,6 +138,7 @@ class MaibMiaClient extends GuzzleClient
      * @param string $payId
      * @param string $reason
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function paymentRefund($payId, $reason, $authToken)
     {
@@ -149,6 +156,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
      * @param array $qrListData
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function qrList($qrListData, $authToken)
     {
@@ -161,6 +169,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
      * @param string $qrId
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function qrDetails($qrId, $authToken)
     {
@@ -177,6 +186,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-list-of-payments-with-filtering-options
      * @param array $paymentListData
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function paymentList($paymentListData, $authToken)
     {
@@ -189,6 +199,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
      * @param string $payId
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function paymentDetails($payId, $authToken)
     {
@@ -205,6 +216,7 @@ class MaibMiaClient extends GuzzleClient
      * @link https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
      * @param array $testPayData
      * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
      */
     public function testPay($testPayData, $authToken)
     {
