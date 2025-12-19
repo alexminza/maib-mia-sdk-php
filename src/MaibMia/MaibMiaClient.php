@@ -7,7 +7,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Command\Guzzle\DescriptionInterface;
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
 use GuzzleHttp\Command\Result;
-use GuzzleHttp\Exception\BadResponseException;
 
 /**
  * maib MIA API client
@@ -60,8 +59,9 @@ class MaibMiaClient extends GuzzleClient
      */
     public function createQr($qrData, $authToken)
     {
-        self::setBearerAuthToken($qrData, $authToken);
-        return parent::createQr($qrData);
+        $args = $qrData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::createQr($args);
     }
 
     /**
@@ -73,8 +73,9 @@ class MaibMiaClient extends GuzzleClient
      */
     public function createHybridQr($qrData, $authToken)
     {
-        self::setBearerAuthToken($qrData, $authToken);
-        return parent::createHybridQr($qrData);
+        $args = $qrData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::createHybridQr($args);
     }
 
     /**
@@ -160,8 +161,9 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrList($qrListData, $authToken)
     {
-        self::setBearerAuthToken($qrListData, $authToken);
-        return parent::qrList($qrListData);
+        $args = $qrListData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::qrList($args);
     }
 
     /**
@@ -190,8 +192,9 @@ class MaibMiaClient extends GuzzleClient
      */
     public function paymentList($paymentListData, $authToken)
     {
-        self::setBearerAuthToken($paymentListData, $authToken);
-        return parent::paymentList($paymentListData);
+        $args = $paymentListData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::paymentList($args);
     }
 
     /**
@@ -220,8 +223,9 @@ class MaibMiaClient extends GuzzleClient
      */
     public function testPay($testPayData, $authToken)
     {
-        self::setBearerAuthToken($testPayData, $authToken);
-        return parent::testPay($testPayData);
+        $args = $testPayData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::testPay($args);
     }
 
     /**
