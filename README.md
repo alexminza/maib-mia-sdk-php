@@ -12,6 +12,11 @@ To easily install or upgrade to the latest release, use `composer`:
 composer require alexminza/maib-mia-sdk
 ```
 
+To enable logging add the `monolog` package:
+```shell
+composer require monolog/monolog
+```
+
 ## Getting started
 Import SDK:
 
@@ -71,7 +76,7 @@ $accessToken = $tokenResponse['result']['accessToken'];
 $validityMinutes = 60;
 $expiresAt = (new DateTime())->modify("+{$validityMinutes} minutes")->format('c');
 
-$qr_data = array(
+$qrData = [
     'type' => 'Dynamic',
     'expiresAt' => $expiresAt,
     'amountType' => 'Fixed',
@@ -81,7 +86,7 @@ $qr_data = array(
     'orderId' => '123',
     'callbackUrl' => 'https://example.com/callback',
     'redirectUrl' => 'https://example.com/success'
-);
+];
 
 $createQrResponse = $maibMiaClient->createQr($qrData, $accessToken);
 print_r($createQrResponse);
@@ -126,7 +131,7 @@ $testPayData = [
     'payerName' => 'TEST QR PAYMENT'
 ];
 
-$testPayResponse = $client->testPay($testPayData, $accessToken);
+$testPayResponse = $maibMiaClient->testPay($testPayData, $accessToken);
 print_r($testPayResponse);
 ```
 
@@ -134,13 +139,13 @@ print_r($testPayResponse);
 
 ```php
 $payId = $testPayResponse['result']['payId'];
-$paymentDetailsResponse = $client->paymentDetails($payId, $accessToken);
+$paymentDetailsResponse = $maibMiaClient->paymentDetails($payId, $accessToken);
 print_r($paymentDetailsResponse);
 ```
 
 ### Refund payment
 
 ```php
-$paymentRefundResponse = $client->paymentRefund($payId, 'Test refund reason', $accessToken);
+$paymentRefundResponse = $maibMiaClient->paymentRefund($payId, 'Test refund reason', $accessToken);
 print_r($paymentRefundResponse);
 ```

@@ -31,14 +31,12 @@
         "guzzlehttp/guzzle": "^7.0",
         "guzzlehttp/guzzle-services": "^1.0"
     },
+    "suggest": {
+        "monolog/monolog": "To enable logging of HTTP requests and responses."
+    },
     "autoload": {
         "psr-4": {
             "Maib\\": "src/"
         }
-    },
-    "archive": {
-        "exclude": [
-            "/.vscode"
-        ]
     }
 }
