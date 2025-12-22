@@ -35,10 +35,5 @@
         "psr-4": {
             "Maib\\": "src/"
         }
-    },
-    "archive": {
-        "exclude": [
-            "/.vscode"
-        ]
     }
 }
