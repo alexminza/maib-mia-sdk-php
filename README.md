@@ -76,7 +76,7 @@ $accessToken = $tokenResponse['result']['accessToken'];
 $validityMinutes = 60;
 $expiresAt = (new DateTime())->modify("+{$validityMinutes} minutes")->format('c');
 
-$qrData = array(
+$qrData = [
     'type' => 'Dynamic',
     'expiresAt' => $expiresAt,
     'amountType' => 'Fixed',
@@ -86,7 +86,7 @@ $qrData = array(
     'orderId' => '123',
     'callbackUrl' => 'https://example.com/callback',
     'redirectUrl' => 'https://example.com/success'
-);
+];
 
 $createQrResponse = $maibMiaClient->createQr($qrData, $accessToken);
 print_r($createQrResponse);
