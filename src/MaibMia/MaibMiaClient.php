@@ -14,8 +14,8 @@ use GuzzleHttp\Command\Result;
  */
 class MaibMiaClient extends GuzzleClient
 {
-    const DEFAULT_BASE_URL = 'https://api.maibmerchants.md/';
-    const SANDBOX_BASE_URL = 'https://sandbox.maibmerchants.md/';
+    public const DEFAULT_BASE_URL = 'https://api.maibmerchants.md/';
+    public const SANDBOX_BASE_URL = 'https://sandbox.maibmerchants.md/';
 
     /**
      * @param ClientInterface      $client
