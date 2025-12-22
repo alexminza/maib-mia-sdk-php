@@ -12,6 +12,11 @@ To easily install or upgrade to the latest release, use `composer`:
 composer require alexminza/maib-mia-sdk
 ```
 
+To enable logging add the `monolog` package:
+```shell
+composer require monolog/monolog
+```
+
 ## Getting started
 Import SDK:
 
