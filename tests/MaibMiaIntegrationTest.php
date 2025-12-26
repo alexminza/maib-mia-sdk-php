@@ -200,8 +200,8 @@ class MaibMiaIntegrationTest extends TestCase
         $testPayData = [
             'qrId' => $data['qrId'],
             'amount' => $data['qrData']['amount'],
-            'iban' => 'MD88AG000000011621810140',
             'currency' => $data['qrData']['currency'],
+            'iban' => 'MD88AG000000011621810140',
             'payerName' => 'TEST QR PAYMENT'
         ];
 
@@ -319,7 +319,11 @@ class MaibMiaIntegrationTest extends TestCase
      */
     public function testAcceptRtpRequest($data)
     {
-        $acceptData = ['amount' => 150.00, 'currency' => 'MDL'];
+        $acceptData = [
+            'amount' => $data['rtpData']['amount'],
+            'currency' => $data['rtpData']['currency']
+        ];
+
         $response = $this->client->rtpTestAccept($data['rtpId'], $acceptData, $data['accessToken']);
         $this->debugLog('rtpTestAccept', $response);
 
