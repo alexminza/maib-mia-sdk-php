@@ -362,11 +362,18 @@ class MaibMiaClient extends GuzzleClient
      */
     public static function validateCallbackSignature($callbackData, $signatureKey)
     {
-        $resultElement = $callbackData['result'] ?? [];
+        $resultData = $callbackData['result'] ?? [];
         $expectedSignature = $callbackData['signature'] ?? '';
 
+        // Compare the result with the signature
+        $computedResultSignature = self::computeDataSignature($resultData, $signatureKey);
+        return hash_equals($expectedSignature, $computedResultSignature);
+    }
+
+    public static function computeDataSignature($resultData, $signatureKey)
+    {
         $keys = [];
-        foreach ($resultElement as $key => $value) {
+        foreach ($resultData as $key => $value) {
             if (is_null($value)) {
                 continue;
             }
@@ -394,7 +401,6 @@ class MaibMiaClient extends GuzzleClient
         $hash = hash('sha256', $hashInput, true);
         $result = base64_encode($hash);
 
-        // Compare the result with the signature
-        return hash_equals($expectedSignature, $result);
+        return $result;
     }
 }
