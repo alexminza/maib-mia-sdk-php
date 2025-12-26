@@ -3,6 +3,7 @@
 ![maib MIA](https://repository-images.githubusercontent.com/1076179057/9258aa73-ca53-4f17-9ee4-08b5e068ef47)
 
 * maib MIA QR API docs: https://docs.maibmerchants.md/mia-qr-api
+* maib Request to Pay (RTP) API docs: https://docs.maibmerchants.md/request-to-pay
 * GitHub project https://github.com/alexminza/maib-mia-sdk-php
 * Composer package https://packagist.org/packages/alexminza/maib-mia-sdk
 
@@ -148,4 +149,24 @@ print_r($paymentDetailsResponse);
 ```php
 $paymentRefundResponse = $maibMiaClient->paymentRefund($payId, 'Test refund reason', $accessToken);
 print_r($paymentRefundResponse);
+```
+
+### Create a Request to Pay (RTP)
+
+```php
+$validityMinutes = 60;
+$expiresAt = (new DateTime())->modify("+{$validityMinutes} minutes")->format('c');
+
+$rtpData = [
+    'alias' => '37369112221',
+    'amount' => 50.00,
+    'expiresAt' => $expiresAt,
+    'currency' => 'MDL',
+    'description' => 'Invoice #123',
+    'orderId' => '123',
+    'callbackUrl' => 'https://example.com/callback'
+];
+
+$rtpCreateResponse = $maibMiaClient->rtpCreate($rtpData, $accessToken);
+print_r($rtpCreateResponse);
 ```

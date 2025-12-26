@@ -229,6 +229,123 @@ class MaibMiaClient extends GuzzleClient
     }
 
     /**
+     * Create a new payment request (RTP)
+     * @param array  $rtpData
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/create-a-new-payment-request-rtp
+     */
+    public function rtpCreate($rtpData, $authToken)
+    {
+        $args = $rtpData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpCreate($args);
+    }
+
+    /**
+     * Retrieve the status of a payment request
+     * @param string $rtpId
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/retrieve-the-status-of-a-payment-request
+     */
+    public function rtpStatus($rtpId, $authToken)
+    {
+        $args = [
+            'rtpId' => $rtpId,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpStatus($args);
+    }
+
+    /**
+     * Cancel a pending payment request
+     * @param string $rtpId
+     * @param string $reason
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/cancel-a-pending-payment-request
+     */
+    public function rtpCancel($rtpId, $reason, $authToken)
+    {
+        $args = [
+            'rtpId' => $rtpId,
+            'reason' => $reason,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpCancel($args);
+    }
+
+    /**
+     * List all payment requests
+     * @param array  $rtpListData
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/list-all-payment-requests
+     */
+    public function rtpList($rtpListData, $authToken)
+    {
+        $args = $rtpListData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpList($args);
+    }
+
+    /**
+     * Initiate a refund for a completed payment
+     * @param string $payId
+     * @param string $reason
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/initiate-a-refund-for-a-completed-payment
+     */
+    public function rtpRefund($payId, $reason, $authToken)
+    {
+        $args = [
+            'payId' => $payId,
+            'reason' => $reason,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpRefund($args);
+    }
+
+    /**
+     * Simulate acceptance of a payment request (Sandbox)
+     * @param string $rtpId
+     * @param array  $testAcceptData
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-acceptance-of-a-payment-request
+     */
+    public function rtpTestAccept($rtpId, $testAcceptData, $authToken)
+    {
+        $args = $testAcceptData;
+        $args['rtpId'] = $rtpId;
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpTestAccept($args);
+    }
+
+    /**
+     * Simulate rejection of a payment request (Sandbox)
+     * @param string $rtpId
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-rejection-of-a-payment-request
+     */
+    public function rtpTestReject($rtpId, $authToken)
+    {
+        $args = [
+            'rtpId' => $rtpId,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::rtpTestReject($args);
+    }
+
+    /**
      * @param array  $args
      * @param string $authToken
      */

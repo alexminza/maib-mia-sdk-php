@@ -86,7 +86,7 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
                 'cancelQrExtension' => [
@@ -100,7 +100,7 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
 
@@ -116,7 +116,7 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
 
@@ -182,6 +182,98 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'TestPayDto']
                     ]
                 ],
+
+                // RTP Operations
+                'rtpCreate' => [
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp',
+                    'summary' => 'Create a new payment request (RTP)',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'RtpCreateDto']
+                    ]
+                ],
+                'rtpStatus' => [
+                    'httpMethod' => 'GET',
+                    'uri' => '/v2/rtp/{rtpId}',
+                    'summary' => 'Retrieve the status of a payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                ],
+                'rtpCancel' => [
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{rtpId}/cancel',
+                    'summary' => 'Cancel a pending payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'CancelDto']
+                    ]
+                ],
+                'rtpList' => [
+                    'httpMethod' => 'GET',
+                    'uri' => '/v2/rtp',
+                    'summary' => 'List all payment requests',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'query',
+                        'schema' => ['$ref' => 'RtpListDto']
+                    ]
+                ],
+                'rtpRefund' => [
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{payId}/refund',
+                    'summary' => 'Initiate a refund for a completed payment',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'payId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'CancelQrDto']
+                    ]
+                ],
+
+                // RTP Simulation Operations (Sandbox)
+                'rtpTestAccept' => [
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{rtpId}/test-accept',
+                    'summary' => 'Simulate acceptance of a payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'RtpTestAcceptDto']
+                    ]
+                ],
+                'rtpTestReject' => [
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{rtpId}/test-reject',
+                    'summary' => 'Simulate rejection of a payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                ],
             ],
 
             'models' => [
@@ -241,7 +333,7 @@ class MaibMiaDescription extends Description
                         'redirectUrl' => ['type' => 'string'],
                     ],
                 ],
-                'CancelQrDto' => [
+                'CancelDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -305,6 +397,49 @@ class MaibMiaDescription extends Description
                         'iban' => ['type' => 'string', 'required' => true],
                         'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                         'payerName' => ['type' => 'string', 'required' => true],
+                    ],
+                ],
+                'RtpCreateDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'alias' => ['type' => 'string', 'required' => true],
+                        'amount' => ['type' => 'number', 'required' => true],
+                        'expiresAt' => ['type' => 'string', 'format' => 'date-time', 'required' => true],
+                        'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
+                        'description' => ['type' => 'string', 'required' => true],
+                        'orderId' => ['type' => 'string'],
+                        'terminalId' => ['type' => 'string'],
+                        'callbackUrl' => ['type' => 'string'],
+                        'redirectUrl' => ['type' => 'string'],
+                    ],
+                ],
+                'RtpListDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'count' => ['type' => 'number', 'required' => true],
+                        'offset' => ['type' => 'number', 'required' => true],
+                        'sortBy' => ['type' => 'string', 'enum' => ['orderId', 'type', 'amount', 'status', 'createdAt', 'expiresAt']],
+                        'order' => ['type' => 'string', 'enum' => ['asc', 'desc']],
+                        'rtpId' => ['type' => 'string'],
+                        'orderId' => ['type' => 'string'],
+                        'amount' => ['type' => 'number'],
+                        'description' => ['type' => 'string'],
+                        'status' => ['type' => 'string', 'enum' => ['Created', 'Active', 'Cancelled', 'Accepted', 'Rejected', 'Expired']],
+                        'createdAtFrom' => ['type' => 'string', 'format' => 'date-time'],
+                        'createdAtTo' => ['type' => 'string', 'format' => 'date-time'],
+                        'expiresAtFrom' => ['type' => 'string', 'format' => 'date-time'],
+                        'expiresAtTo' => ['type' => 'string', 'format' => 'date-time'],
+                        'terminalId' => ['type' => 'string'],
+                    ],
+                ],
+                'RtpTestAcceptDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'amount' => ['type' => 'number', 'required' => true],
+                        'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                     ],
                 ],
             ]
