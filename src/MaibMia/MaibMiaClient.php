@@ -32,6 +32,7 @@ class MaibMiaClient extends GuzzleClient
         parent::__construct($client, $description, null, null, null, $config);
     }
 
+    #region Auth
     /**
      * Obtain Authentication Token
      * @param string $clientId
@@ -49,7 +50,9 @@ class MaibMiaClient extends GuzzleClient
 
         return parent::getToken($args);
     }
+    #endregion
 
+    #region QR
     /**
      * Create QR Code (Static, Dynamic)
      * @param array  $qrData
@@ -163,6 +166,39 @@ class MaibMiaClient extends GuzzleClient
         self::setBearerAuthToken($args, $authToken);
         return parent::qrList($args);
     }
+    #endregion
+
+    #region Payment
+    /**
+     * Payment Simulation (Sandbox)
+     * @param array $testPayData
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
+     */
+    public function testPay($testPayData, $authToken)
+    {
+        $args = $testPayData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::testPay($args);
+    }
+
+    /**
+     * Retrieve Payment Details by ID
+     * @param string $payId
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
+     */
+    public function paymentDetails($payId, $authToken)
+    {
+        $args = [
+            'payId' => $payId,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::paymentDetails($args);
+    }
 
     /**
      * Refund Completed Payment
@@ -196,38 +232,9 @@ class MaibMiaClient extends GuzzleClient
         self::setBearerAuthToken($args, $authToken);
         return parent::paymentList($args);
     }
+    #endregion
 
-    /**
-     * Retrieve Payment Details by ID
-     * @param string $payId
-     * @param string $authToken
-     * @return \GuzzleHttp\Command\Result
-     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
-     */
-    public function paymentDetails($payId, $authToken)
-    {
-        $args = [
-            'payId' => $payId,
-        ];
-
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentDetails($args);
-    }
-
-    /**
-     * Payment Simulation (Sandbox)
-     * @param array $testPayData
-     * @param string $authToken
-     * @return \GuzzleHttp\Command\Result
-     * @link https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
-     */
-    public function testPay($testPayData, $authToken)
-    {
-        $args = $testPayData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::testPay($args);
-    }
-
+    #region RTP
     /**
      * Create a new payment request (RTP)
      * @param array  $rtpData
@@ -344,16 +351,9 @@ class MaibMiaClient extends GuzzleClient
         self::setBearerAuthToken($args, $authToken);
         return parent::rtpTestReject($args);
     }
+    #endregion
 
-    /**
-     * @param array  $args
-     * @param string $authToken
-     */
-    private static function setBearerAuthToken(&$args, $authToken)
-    {
-        $args['authToken'] = "Bearer $authToken";
-    }
-
+    #region Signature
     /**
      * Callback Payload Signature Key Verification
      * @param array  $callbackData
@@ -403,4 +403,16 @@ class MaibMiaClient extends GuzzleClient
 
         return $result;
     }
+    #endregion
+
+    #region Util
+    /**
+     * @param array  $args
+     * @param string $authToken
+     */
+    private static function setBearerAuthToken(&$args, $authToken)
+    {
+        $args['authToken'] = "Bearer $authToken";
+    }
+    #endregion
 }
