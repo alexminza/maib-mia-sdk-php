@@ -35,7 +35,7 @@ class MaibMiaDescription extends Description
                 ],
 
                 // QR Operations
-                'createQr' => [
+                'qrCreate' => [
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr',
                     'summary' => 'Create QR Code (Static, Dynamic)',
@@ -45,10 +45,10 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CreateQrDto']
+                        'schema' => ['$ref' => 'QrCreateDto']
                     ]
                 ],
-                'createHybridQr' => [
+                'qrCreateHybrid' => [
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/hybrid',
                     'summary' => 'Create Hybrid QR Code',
@@ -58,10 +58,10 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CreateHybridQrDto']
+                        'schema' => ['$ref' => 'QrCreateHybridDto']
                     ]
                 ],
-                'createQrExtension' => [
+                'qrCreateExtension' => [
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/extension',
                     'summary' => 'Create Extension for QR Code by ID',
@@ -72,10 +72,10 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CreateQrExtensionDto']
+                        'schema' => ['$ref' => 'QrCreateExtensionDto']
                     ]
                 ],
-                'cancelQr' => [
+                'qrCancel' => [
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/cancel',
                     'summary' => 'Cancel Active QR (Static, Dynamic)',
@@ -89,7 +89,7 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
-                'cancelQrExtension' => [
+                'qrCancelExtension' => [
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/extension/cancel',
                     'summary' => 'Cancel Active QR Extension (Hybrid)',
@@ -245,7 +245,7 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
 
@@ -291,7 +291,7 @@ class MaibMiaDescription extends Description
                         'clientSecret' => ['type' => 'string', 'required' => true],
                     ],
                 ],
-                'CreateQrDto' => [
+                'QrCreateDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -309,17 +309,17 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string'],
                     ],
                 ],
-                'CreateHybridQrDto' => [
+                'QrCreateHybridDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
                         'amountType' => ['type' => 'string', 'enum' => ['Fixed', 'Controlled', 'Free'], 'required' => true],
                         'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                         'terminalId' => ['type' => 'string'],
-                        'extension' => ['$ref' => 'CreateQrExtensionDto'],
+                        'extension' => ['$ref' => 'QrCreateExtensionDto'],
                     ],
                 ],
-                'CreateQrExtensionDto' => [
+                'QrCreateExtensionDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [

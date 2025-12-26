@@ -89,8 +89,8 @@ $qrData = [
     'redirectUrl' => 'https://example.com/success'
 ];
 
-$createQrResponse = $maibMiaClient->createQr($qrData, $accessToken);
-print_r($createQrResponse);
+$qrCreateResponse = $maibMiaClient->qrCreate($qrData, $accessToken);
+print_r($qrCreateResponse);
 ```
 
 ### Validate callback signature
@@ -123,7 +123,7 @@ print_r($validationResult);
 ### Perform a test QR payment
 
 ```php
-$qrId = $createQrResponse['result']['qrId'];
+$qrId = $qrCreateResponse['result']['qrId'];
 $testPayData = [
     'qrId' => $qrId,
     'amount' => 50.00,

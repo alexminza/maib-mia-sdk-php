@@ -78,8 +78,8 @@ class MaibMiaIntegrationTest extends TestCase
             'redirectUrl' => 'https://example.com/success'
         ];
 
-        $response = $this->client->createQr($qrData, $accessToken);
-        $this->debugLog('createQr', $response);
+        $response = $this->client->qrCreate($qrData, $accessToken);
+        $this->debugLog('qrCreate', $response);
 
         $this->assertArrayHasKey('qrId', $response['result']);
         $this->assertNotEmpty($response['result']['qrId']);
@@ -94,7 +94,7 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testAuthenticate
      */
-    public function testCreateHybridQr($accessToken)
+    public function testQrCreateHybrid($accessToken)
     {
         $hybridData = [
             'amountType' => 'Fixed',
@@ -110,8 +110,8 @@ class MaibMiaIntegrationTest extends TestCase
             ]
         ];
 
-        $response = $this->client->createHybridQr($hybridData, $accessToken);
-        $this->debugLog('createHybridQr', $response);
+        $response = $this->client->qrCreateHybrid($hybridData, $accessToken);
+        $this->debugLog('qrCreateHybrid', $response);
 
         $this->assertArrayHasKey('qrId', $response['result']);
         $this->assertNotEmpty($response['result']['qrId']);
@@ -123,9 +123,9 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateHybridQr
+     * @depends testQrCreateHybrid
      */
-    public function testCreateQrExtension($data)
+    public function testQrCreateExtension($data)
     {
         $this->markTestSkipped();
 
@@ -138,35 +138,35 @@ class MaibMiaIntegrationTest extends TestCase
             'redirectUrl' => 'https://example.com/success'
         ];
 
-        $response = $this->client->createQrExtension($data['hybridQrId'], $extensionData, $data['accessToken']);
-        $this->debugLog('createQrExtension', $response);
+        $response = $this->client->qrCreateExtension($data['hybridQrId'], $extensionData, $data['accessToken']);
+        $this->debugLog('qrCreateExtension', $response);
         $this->assertNotNull($response);
     }
 
     /**
-     * @depends testCreateHybridQr
+     * @depends testQrCreateHybrid
      */
-    public function testCancelQrExtension($data)
+    public function testQrCancelExtension($data)
     {
-        $response = $this->client->cancelQrExtension($data['hybridQrId'], 'Test cancel reason', $data['accessToken']);
-        $this->debugLog('cancelQrExtension', $response);
+        $response = $this->client->qrCancelExtension($data['hybridQrId'], 'Test cancel reason', $data['accessToken']);
+        $this->debugLog('qrCancelExtension', $response);
         $this->assertNotNull($response);
     }
 
     /**
-     * @depends testCreateHybridQr
+     * @depends testQrCreateHybrid
      */
-    public function testCancelQr($data)
+    public function testQrCancel($data)
     {
-        $response = $this->client->cancelQr($data['hybridQrId'], 'Test cancel reason', $data['accessToken']);
-        $this->debugLog('cancelQr', $response);
+        $response = $this->client->qrCancel($data['hybridQrId'], 'Test cancel reason', $data['accessToken']);
+        $this->debugLog('qrCancel', $response);
         $this->assertNotNull($response);
     }
 
     /**
      * @depends testCreateDynamicQr
      */
-    public function testGetQrDetails($data)
+    public function testQrDetails($data)
     {
         $response = $this->client->qrDetails($data['qrId'], $data['accessToken']);
         $this->debugLog('qrDetails', $response);

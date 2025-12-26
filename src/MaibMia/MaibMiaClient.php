@@ -57,11 +57,11 @@ class MaibMiaClient extends GuzzleClient
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
      */
-    public function createQr($qrData, $authToken)
+    public function qrCreate($qrData, $authToken)
     {
         $args = $qrData;
         self::setBearerAuthToken($args, $authToken);
-        return parent::createQr($args);
+        return parent::qrCreate($args);
     }
 
     /**
@@ -71,11 +71,11 @@ class MaibMiaClient extends GuzzleClient
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code
      */
-    public function createHybridQr($qrData, $authToken)
+    public function qrCreateHybrid($qrData, $authToken)
     {
         $args = $qrData;
         self::setBearerAuthToken($args, $authToken);
-        return parent::createHybridQr($args);
+        return parent::qrCreateHybrid($args);
     }
 
     /**
@@ -86,13 +86,30 @@ class MaibMiaClient extends GuzzleClient
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code/create-extension-for-qr-code-by-id
      */
-    public function createQrExtension($qrId, $qrData, $authToken)
+    public function qrCreateExtension($qrId, $qrData, $authToken)
     {
         $args = $qrData;
         $args['qrId'] = $qrId;
 
         self::setBearerAuthToken($args, $authToken);
-        return parent::createQrExtension($args);
+        return parent::qrCreateExtension($args);
+    }
+
+    /**
+     * Retrieve QR Details by ID
+     * @param string $qrId
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
+     */
+    public function qrDetails($qrId, $authToken)
+    {
+        $args = [
+            'qrId' => $qrId,
+        ];
+
+        self::setBearerAuthToken($args, $authToken);
+        return parent::qrDetails($args);
     }
 
     /**
@@ -103,7 +120,7 @@ class MaibMiaClient extends GuzzleClient
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic
      */
-    public function cancelQr($qrId, $reason, $authToken)
+    public function qrCancel($qrId, $reason, $authToken)
     {
         $args = [
             'qrId' => $qrId,
@@ -111,7 +128,7 @@ class MaibMiaClient extends GuzzleClient
         ];
 
         self::setBearerAuthToken($args, $authToken);
-        return parent::cancelQr($args);
+        return parent::qrCancel($args);
     }
 
     /**
@@ -122,7 +139,7 @@ class MaibMiaClient extends GuzzleClient
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid
      */
-    public function cancelQrExtension($qrId, $reason, $authToken)
+    public function qrCancelExtension($qrId, $reason, $authToken)
     {
         $args = [
             'qrId' => $qrId,
@@ -130,7 +147,21 @@ class MaibMiaClient extends GuzzleClient
         ];
 
         self::setBearerAuthToken($args, $authToken);
-        return parent::cancelQrExtension($args);
+        return parent::qrCancelExtension($args);
+    }
+
+    /**
+     * Display List of QR Codes with Filtering Options
+     * @param array $qrListData
+     * @param string $authToken
+     * @return \GuzzleHttp\Command\Result
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
+     */
+    public function qrList($qrListData, $authToken)
+    {
+        $args = $qrListData;
+        self::setBearerAuthToken($args, $authToken);
+        return parent::qrList($args);
     }
 
     /**
@@ -150,37 +181,6 @@ class MaibMiaClient extends GuzzleClient
 
         self::setBearerAuthToken($args, $authToken);
         return parent::paymentRefund($args);
-    }
-
-    /**
-     * Display List of QR Codes with Filtering Options
-     * @param array $qrListData
-     * @param string $authToken
-     * @return \GuzzleHttp\Command\Result
-     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
-     */
-    public function qrList($qrListData, $authToken)
-    {
-        $args = $qrListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrList($args);
-    }
-
-    /**
-     * Retrieve QR Details by ID
-     * @param string $qrId
-     * @param string $authToken
-     * @return \GuzzleHttp\Command\Result
-     * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
-     */
-    public function qrDetails($qrId, $authToken)
-    {
-        $args = [
-            'qrId' => $qrId,
-        ];
-
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrDetails($args);
     }
 
     /**
