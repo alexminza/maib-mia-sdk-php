@@ -158,13 +158,15 @@ $validityMinutes = 60;
 $expiresAt = (new DateTime())->modify("+{$validityMinutes} minutes")->format('c');
 
 $rtpData = [
-    'alias' => '37369112221',
-    'amount' => 50.00,
+    'alias' => '3736xxxxxxx',
+    'amount' => 150.00,
     'expiresAt' => $expiresAt,
     'currency' => 'MDL',
     'description' => 'Invoice #123',
     'orderId' => '123',
-    'callbackUrl' => 'https://example.com/callback'
+    'terminalId' => 'P011111',
+    'callbackUrl' => 'https://example.com/callback',
+    'redirectUrl' => 'https://example.com/success'
 ];
 
 $rtpCreateResponse = $maibMiaClient->rtpCreate($rtpData, $accessToken);
