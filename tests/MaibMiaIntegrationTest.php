@@ -383,8 +383,9 @@ class MaibMiaIntegrationTest extends TestCase
             'signature' => 'fHM+l4L1ycFWZDRTh/Vr8oybq1Q1xySdjyvmFQCmZ4s='
         ];
 
+        $this->assertFalse(MaibMiaClient::validateCallbackSignature($callbackData, self::$signatureKey));
+
         $callbackData['signature'] = MaibMiaClient::computeDataSignature($callbackData['result'], self::$signatureKey);
-        $isValid = MaibMiaClient::validateCallbackSignature($callbackData, self::$signatureKey);
-        $this->assertTrue($isValid);
+        $this->assertTrue(MaibMiaClient::validateCallbackSignature($callbackData, self::$signatureKey));
     }
 }
