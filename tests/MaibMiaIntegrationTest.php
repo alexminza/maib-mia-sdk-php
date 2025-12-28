@@ -50,8 +50,39 @@ class MaibMiaIntegrationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->client = new MaibMiaClient(new Client(['base_uri' => self::$baseUrl]));
+        $options = [
+            'base_uri' => self::$baseUrl,
+            'timeout' => 15
+        ];
+
+        #region Logging
+        $classParts = explode('\\', self::class);
+        $logName = end($classParts) . '_guzzle';
+        $logFileName = "$logName.log";
+
+        $log = new \Monolog\Logger($logName);
+        $log->pushHandler(new \Monolog\Handler\StreamHandler($logFileName, \Monolog\Level::Debug));
+
+        $stack = \GuzzleHttp\HandlerStack::create();
+        $stack->push(\GuzzleHttp\Middleware::log($log, new \GuzzleHttp\MessageFormatter(\GuzzleHttp\MessageFormatter::DEBUG)));
+
+        $options['handler'] = $stack;
+        #endregion
+
+        $this->client = new MaibMiaClient(new Client($options));
         $this->expiresAt = (new \DateTime())->modify('+1 hour')->format('c');
+    }
+
+    protected function onNotSuccessfulTest(\Throwable $t): never
+    {
+        // https://github.com/guzzle/guzzle/issues/2185
+        if ($t instanceof \GuzzleHttp\Command\Exception\CommandException) {
+            $response = $t->getResponse();
+            $responseBody = (string) $response->getBody();
+            // $this->debugLog($responseBody, $t->getMessage());
+        }
+
+        parent::onNotSuccessfulTest($t);
     }
 
     protected function debugLog($message, $data)
@@ -63,7 +94,7 @@ class MaibMiaIntegrationTest extends TestCase
     public function testAuthenticate()
     {
         $response = $this->client->getToken(self::$clientId, self::$clientSecret);
-        $this->debugLog('getToken', $response);
+        // $this->debugLog('getToken', $response);
 
         $this->assertArrayHasKey('accessToken', $response['result']);
         $this->assertNotEmpty($response['result']['accessToken']);
@@ -89,7 +120,7 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->qrCreate($qrData, self::$accessToken);
-        $this->debugLog('qrCreate', $response);
+        // $this->debugLog('qrCreate', $response);
 
         $this->assertArrayHasKey('qrId', $response['result']);
         $this->assertNotEmpty($response['result']['qrId']);
@@ -118,7 +149,7 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->qrCreateHybrid($hybridData, self::$accessToken);
-        $this->debugLog('qrCreateHybrid', $response);
+        // $this->debugLog('qrCreateHybrid', $response);
 
         $this->assertArrayHasKey('qrId', $response['result']);
         $this->assertNotEmpty($response['result']['qrId']);
@@ -141,7 +172,8 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->qrCreateExtension(self::$hybridQrId, $extensionData, self::$accessToken);
-        $this->debugLog('qrCreateExtension', $response);
+        // $this->debugLog('qrCreateExtension', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -151,7 +183,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testQrCancelExtension()
     {
         $response = $this->client->qrCancelExtension(self::$hybridQrId, 'Test cancel reason', self::$accessToken);
-        $this->debugLog('qrCancelExtension', $response);
+        // $this->debugLog('qrCancelExtension', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -161,7 +194,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testQrCancel()
     {
         $response = $this->client->qrCancel(self::$hybridQrId, 'Test cancel reason', self::$accessToken);
-        $this->debugLog('qrCancel', $response);
+        // $this->debugLog('qrCancel', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -171,7 +205,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testQrDetails()
     {
         $response = $this->client->qrDetails(self::$qrId, self::$accessToken);
-        $this->debugLog('qrDetails', $response);
+        // $this->debugLog('qrDetails', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -190,7 +225,8 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->qrList($params, self::$accessToken);
-        $this->debugLog('qrList', $response);
+        // $this->debugLog('qrList', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -208,7 +244,7 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->testPay($testPayData, self::$accessToken);
-        $this->debugLog('testPay', $response);
+        // $this->debugLog('testPay', $response);
 
         $this->assertArrayHasKey('payId', $response['result']);
         $this->assertNotEmpty($response['result']['payId']);
@@ -222,7 +258,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testGetPaymentDetails()
     {
         $response = $this->client->paymentDetails(self::$qrPayId, self::$accessToken);
-        $this->debugLog('paymentDetails', $response);
+        // $this->debugLog('paymentDetails', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -232,7 +269,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testRefundPayment()
     {
         $response = $this->client->paymentRefund(self::$qrPayId, 'Test refund reason', self::$accessToken);
-        $this->debugLog('paymentRefund', $response);
+        // $this->debugLog('paymentRefund', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -250,7 +288,8 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->paymentList($params, self::$accessToken);
-        $this->debugLog('paymentList', $response);
+        // $this->debugLog('paymentList', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -273,7 +312,7 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->rtpCreate($rtpData, self::$accessToken);
-        $this->debugLog('rtpCreate', $response);
+        // $this->debugLog('rtpCreate', $response);
 
         $this->assertArrayHasKey('rtpId', $response['result']);
         $this->assertNotEmpty($response['result']['rtpId']);
@@ -288,7 +327,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testGetRtpStatus()
     {
         $response = $this->client->rtpStatus(self::$rtpId, self::$accessToken);
-        $this->debugLog('rtpStatus', $response);
+        // $this->debugLog('rtpStatus', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -305,7 +345,8 @@ class MaibMiaIntegrationTest extends TestCase
             'order' => 'desc'
         ];
         $response = $this->client->rtpList($params, self::$accessToken);
-        $this->debugLog('rtpList', $response);
+        // $this->debugLog('rtpList', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -320,7 +361,7 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         $response = $this->client->rtpTestAccept(self::$rtpId, $acceptData, self::$accessToken);
-        $this->debugLog('rtpTestAccept', $response);
+        // $this->debugLog('rtpTestAccept', $response);
 
         $this->assertArrayHasKey('payId', $response['result']);
         $this->assertNotEmpty($response['result']['payId']);
@@ -334,7 +375,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testRefundRtpPayment()
     {
         $response = $this->client->rtpRefund(self::$rtpPayId, 'Test refund reason', self::$accessToken);
-        $this->debugLog('rtpRefund', $response);
+        // $this->debugLog('rtpRefund', $response);
+
         $this->assertNotNull($response);
     }
 
@@ -345,11 +387,13 @@ class MaibMiaIntegrationTest extends TestCase
     {
         // Create a new one to cancel
         $response = $this->client->rtpCreate(self::$rtpData, self::$accessToken);
-        $this->debugLog('rtpCreate', $response);
+        // $this->debugLog('rtpCreate', $response);
+
         $rtpIdToCancel = $response['result']['rtpId'];
 
         $cancelResponse = $this->client->rtpCancel($rtpIdToCancel, 'Test cancel reason', self::$accessToken);
-        $this->debugLog('rtpCancel', $cancelResponse);
+        // $this->debugLog('rtpCancel', $cancelResponse);
+
         $this->assertNotNull($cancelResponse);
     }
 
