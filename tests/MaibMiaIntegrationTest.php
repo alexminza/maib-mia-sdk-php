@@ -131,8 +131,6 @@ class MaibMiaIntegrationTest extends TestCase
      */
     public function testQrCreateExtension()
     {
-        $this->markTestSkipped();
-
         $extensionData = [
             'expiresAt' => $this->expiresAt,
             'amount' => 100.00,
