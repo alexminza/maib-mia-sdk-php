@@ -11,7 +11,7 @@ class MaibMiaDescription extends Description
     {
         $package = 'alexminza/maib-mia-sdk';
         $version = InstalledVersions::getPrettyVersion($package) ?? 'dev';
-        $userAgent = "$package-php/$version";
+        $userAgent = "maib-mia-sdk-php/$version";
 
         $authorizationHeader = [
             'type' => 'string',
