@@ -3,11 +3,16 @@
 namespace Maib\MaibMia;
 
 use GuzzleHttp\Command\Guzzle\Description;
+use Composer\InstalledVersions;
 
 class MaibMiaDescription extends Description
 {
     public function __construct(array $options = [])
     {
+        $package = 'alexminza/maib-mia-sdk';
+        $version = InstalledVersions::getPrettyVersion($package) ?? 'dev';
+        $userAgent = "$package-php/$version";
+
         $authorizationHeader = [
             'type' => 'string',
             'location' => 'header',
@@ -22,8 +27,18 @@ class MaibMiaDescription extends Description
             'apiVersion' => 'v2',
 
             'operations' => [
+                'baseOp' => [
+                    'parameters' => [
+                        'User-Agent' => [
+                            'location' => 'header',
+                            'default'  => $userAgent,
+                        ],
+                    ],
+                ],
+
                 // Authentication Operations
                 'getToken' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/auth/token',
                     'summary' => 'Obtain Authentication Token',
@@ -36,6 +51,7 @@ class MaibMiaDescription extends Description
 
                 // QR Operations
                 'qrCreate' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr',
                     'summary' => 'Create QR Code (Static, Dynamic)',
@@ -49,6 +65,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'qrCreateHybrid' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/hybrid',
                     'summary' => 'Create Hybrid QR Code',
@@ -62,6 +79,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'qrCreateExtension' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/extension',
                     'summary' => 'Create Extension for QR Code by ID',
@@ -76,6 +94,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'qrCancel' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/cancel',
                     'summary' => 'Cancel Active QR (Static, Dynamic)',
@@ -90,6 +109,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'qrCancelExtension' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/extension/cancel',
                     'summary' => 'Cancel Active QR Extension (Hybrid)',
@@ -106,6 +126,7 @@ class MaibMiaDescription extends Description
 
                 // Payment Operations
                 'paymentRefund' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/payments/{payId}/refund',
                     'summary' => 'Refund Completed Payment',
@@ -122,6 +143,7 @@ class MaibMiaDescription extends Description
 
                 // Information Retrieval Operations
                 'qrList' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/qr',
                     'summary' => 'Display List of QR Codes with Filtering Options',
@@ -135,6 +157,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'qrDetails' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/qr/{qrId}',
                     'summary' => 'Retrieve QR Details by ID',
@@ -145,6 +168,7 @@ class MaibMiaDescription extends Description
                     ],
                 ],
                 'paymentList' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/payments',
                     'summary' => 'Retrieve List of Payments with Filtering Options',
@@ -158,6 +182,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'paymentDetails' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/payments/{payId}',
                     'summary' => 'Retrieve Payment Details by ID',
@@ -170,6 +195,7 @@ class MaibMiaDescription extends Description
 
                 // Payment Simulation Operations
                 'testPay' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/test-pay',
                     'summary' => 'Payment Simulation (Sandbox)',
@@ -185,6 +211,7 @@ class MaibMiaDescription extends Description
 
                 // RTP Operations
                 'rtpCreate' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/rtp',
                     'summary' => 'Create a new payment request (RTP)',
@@ -198,6 +225,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'rtpStatus' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/rtp/{rtpId}',
                     'summary' => 'Retrieve the status of a payment request',
@@ -208,6 +236,7 @@ class MaibMiaDescription extends Description
                     ],
                 ],
                 'rtpCancel' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/rtp/{rtpId}/cancel',
                     'summary' => 'Cancel a pending payment request',
@@ -222,6 +251,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'rtpList' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/rtp',
                     'summary' => 'List all payment requests',
@@ -235,6 +265,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'rtpRefund' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/rtp/{payId}/refund',
                     'summary' => 'Initiate a refund for a completed payment',
@@ -251,6 +282,7 @@ class MaibMiaDescription extends Description
 
                 // RTP Simulation Operations (Sandbox)
                 'rtpTestAccept' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/rtp/{rtpId}/test-accept',
                     'summary' => 'Simulate acceptance of a payment request',
@@ -265,6 +297,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'rtpTestReject' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/rtp/{rtpId}/test-reject',
                     'summary' => 'Simulate rejection of a payment request',
