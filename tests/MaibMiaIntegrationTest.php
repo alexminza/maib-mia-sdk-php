@@ -182,7 +182,11 @@ class MaibMiaIntegrationTest extends TestCase
      */
     public function testQrCancelExtension()
     {
-        $response = $this->client->qrCancelExtension(self::$hybridQrId, 'Test cancel reason', self::$accessToken);
+        $cancelData = [
+            'reason' => 'testQrCancelExtension reason'
+        ];
+
+        $response = $this->client->qrCancelExtension(self::$hybridQrId, $cancelData, self::$accessToken);
         // $this->debugLog('qrCancelExtension', $response);
 
         $this->assertNotNull($response);
@@ -193,7 +197,11 @@ class MaibMiaIntegrationTest extends TestCase
      */
     public function testQrCancel()
     {
-        $response = $this->client->qrCancel(self::$hybridQrId, 'Test cancel reason', self::$accessToken);
+        $cancelData = [
+            'reason' => 'testQrCancel reason'
+        ];
+
+        $response = $this->client->qrCancel(self::$hybridQrId, $cancelData, self::$accessToken);
         // $this->debugLog('qrCancel', $response);
 
         $this->assertNotNull($response);
@@ -266,9 +274,13 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testPerformTestQrPayment
      */
-    public function testRefundPayment()
+    public function testRefundPaymentFull()
     {
-        $response = $this->client->paymentRefund(self::$qrPayId, 'Test refund reason', self::$accessToken);
+        $refundData = [
+            'reason' => 'testRefundPaymentFull reason'
+        ];
+
+        $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
         // $this->debugLog('paymentRefund', $response);
 
         $this->assertNotNull($response);
@@ -374,7 +386,11 @@ class MaibMiaIntegrationTest extends TestCase
      */
     public function testRefundRtpPayment()
     {
-        $response = $this->client->rtpRefund(self::$rtpPayId, 'Test refund reason', self::$accessToken);
+        $refundData = [
+            'reason' => 'testRefundRtpPayment reason'
+        ];
+
+        $response = $this->client->rtpRefund(self::$rtpPayId, $refundData, self::$accessToken);
         // $this->debugLog('rtpRefund', $response);
 
         $this->assertNotNull($response);
@@ -389,12 +405,20 @@ class MaibMiaIntegrationTest extends TestCase
         $response = $this->client->rtpCreate(self::$rtpData, self::$accessToken);
         // $this->debugLog('rtpCreate', $response);
 
-        $rtpIdToCancel = $response['result']['rtpId'];
+        $rtpId = $response['result']['rtpId'];
+        $cancelData = [
+            'reason' => 'testCancelRtpRequest reason'
+        ];
 
-        $cancelResponse = $this->client->rtpCancel($rtpIdToCancel, 'Test cancel reason', self::$accessToken);
+        $response = $this->client->rtpCancel($rtpId, $cancelData, self::$accessToken);
         // $this->debugLog('rtpCancel', $cancelResponse);
 
-        $this->assertNotNull($cancelResponse);
+        $this->assertNotNull($response);
+        $this->assertArrayHasKey('ok', $response);
+        $this->assertTrue($response['ok']);
+        $this->assertArrayHasKey('result', $response);
+        $this->assertEquals($rtpId, $response['result']['rtpId']);
+        $this->assertEquals('Cancelled', $response['result']['status']);
     }
 
 
