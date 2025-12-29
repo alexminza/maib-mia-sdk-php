@@ -63,7 +63,7 @@ class MaibMiaIntegrationTest extends TestCase
         $logFileName = "$logName.log";
 
         $log = new \Monolog\Logger($logName);
-        $log->pushHandler(new \Monolog\Handler\StreamHandler($logFileName, \Monolog\Level::Debug));
+        $log->pushHandler(new \Monolog\Handler\StreamHandler($logFileName, \Monolog\Logger::DEBUG));
 
         $stack = \GuzzleHttp\HandlerStack::create();
         $stack->push(\GuzzleHttp\Middleware::log($log, new \GuzzleHttp\MessageFormatter(\GuzzleHttp\MessageFormatter::DEBUG)));
@@ -75,7 +75,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->expiresAt = (new \DateTime())->modify('+1 hour')->format('c');
     }
 
-    protected function onNotSuccessfulTest(\Throwable $t): never
+    protected function onNotSuccessfulTest(\Throwable $t): void
     {
         if ($this->isDebugMode()) {
             // https://github.com/guzzle/guzzle/issues/2185
