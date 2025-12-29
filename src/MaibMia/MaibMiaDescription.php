@@ -128,7 +128,7 @@ class MaibMiaDescription extends Description
                 'paymentRefund' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
-                    'uri' => '/v2/mia/payments/{payId}/refund',
+                    'uri' => '/v2/payments/{payId}/refund',
                     'summary' => 'Refund Completed Payment',
                     'responseModel' => 'getResponse',
                     'parameters' => [
@@ -137,7 +137,7 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelDto']
+                        'schema' => ['$ref' => 'RefundDto']
                     ]
                 ],
 
@@ -371,6 +371,15 @@ class MaibMiaDescription extends Description
                     'additionalProperties' => false,
                     'properties' => [
                         'reason' => ['type' => 'string', 'required' => true],
+                    ],
+                ],
+                'RefundDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'amount' => ['type' => 'number'],
+                        'reason' => ['type' => 'string', 'required' => true],
+                        'callbackUrl' => ['type' => 'string'],
                     ],
                 ],
                 'QrListDto' => [

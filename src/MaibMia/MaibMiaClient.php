@@ -118,17 +118,15 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Cancel Active QR (Static, Dynamic)
      * @param string $qrId
-     * @param string $reason
+     * @param array $cancelData
      * @param string $authToken
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic
      */
-    public function qrCancel($qrId, $reason, $authToken)
+    public function qrCancel($qrId, $cancelData, $authToken)
     {
-        $args = [
-            'qrId' => $qrId,
-            'reason' => $reason,
-        ];
+        $args = $cancelData;
+        $args['qrId'] = $qrId;
 
         self::setBearerAuthToken($args, $authToken);
         return parent::qrCancel($args);
@@ -137,17 +135,15 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Cancel Active QR Extension (Hybrid)
      * @param string $qrId
-     * @param string $reason
+     * @param array $cancelData
      * @param string $authToken
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid
      */
-    public function qrCancelExtension($qrId, $reason, $authToken)
+    public function qrCancelExtension($qrId, $cancelData, $authToken)
     {
-        $args = [
-            'qrId' => $qrId,
-            'reason' => $reason,
-        ];
+        $args = $cancelData;
+        $args['qrId'] = $qrId;
 
         self::setBearerAuthToken($args, $authToken);
         return parent::qrCancelExtension($args);
@@ -203,17 +199,15 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Refund Completed Payment
      * @param string $payId
-     * @param string $reason
+     * @param array $refundData
      * @param string $authToken
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
      */
-    public function paymentRefund($payId, $reason, $authToken)
+    public function paymentRefund($payId, $refundData, $authToken)
     {
-        $args = [
-            'payId' => $payId,
-            'reason' => $reason,
-        ];
+        $args = $refundData;
+        $args['payId'] = $payId;
 
         self::setBearerAuthToken($args, $authToken);
         return parent::paymentRefund($args);
@@ -269,17 +263,15 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Cancel a pending payment request
      * @param string $rtpId
-     * @param string $reason
+     * @param array $cancelData
      * @param string $authToken
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/cancel-a-pending-payment-request
      */
-    public function rtpCancel($rtpId, $reason, $authToken)
+    public function rtpCancel($rtpId, $cancelData, $authToken)
     {
-        $args = [
-            'rtpId' => $rtpId,
-            'reason' => $reason,
-        ];
+        $args = $cancelData;
+        $args['rtpId'] = $rtpId;
 
         self::setBearerAuthToken($args, $authToken);
         return parent::rtpCancel($args);
@@ -302,17 +294,15 @@ class MaibMiaClient extends GuzzleClient
     /**
      * Initiate a refund for a completed payment
      * @param string $payId
-     * @param string $reason
+     * @param array $refundData
      * @param string $authToken
      * @return \GuzzleHttp\Command\Result
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/initiate-a-refund-for-a-completed-payment
      */
-    public function rtpRefund($payId, $reason, $authToken)
+    public function rtpRefund($payId, $refundData, $authToken)
     {
-        $args = [
-            'payId' => $payId,
-            'reason' => $reason,
-        ];
+        $args = $refundData;
+        $args['payId'] = $payId;
 
         self::setBearerAuthToken($args, $authToken);
         return parent::rtpRefund($args);
