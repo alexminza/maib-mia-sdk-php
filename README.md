@@ -90,7 +90,6 @@ $qrData = [
 ];
 
 $qrCreateResponse = $maibMiaClient->qrCreate($qrData, $accessToken);
-print_r($qrCreateResponse);
 ```
 
 ### Validate callback signature
@@ -117,7 +116,6 @@ $callbackBody = '{
 
 $callbackData = json_decode($callbackBody, true);
 $validationResult = MaibMiaClient::validateCallbackSignature($callbackData, $MAIB_MIA_SIGNATURE_KEY);
-print_r($validationResult);
 ```
 
 ### Perform a test QR payment
@@ -133,7 +131,6 @@ $testPayData = [
 ];
 
 $testPayResponse = $maibMiaClient->testPay($testPayData, $accessToken);
-print_r($testPayResponse);
 ```
 
 ### Get payment details
@@ -141,7 +138,6 @@ print_r($testPayResponse);
 ```php
 $payId = $testPayResponse['result']['payId'];
 $paymentDetailsResponse = $maibMiaClient->paymentDetails($payId, $accessToken);
-print_r($paymentDetailsResponse);
 ```
 
 ### Refund payment
@@ -154,7 +150,6 @@ $refundData = [
 ];
 
 $paymentRefundResponse = $maibMiaClient->paymentRefund($payId, $refundData, $accessToken);
-print_r($paymentRefundResponse);
 ```
 
 ### Create a Request to Pay (RTP)
@@ -176,5 +171,4 @@ $rtpData = [
 ];
 
 $rtpCreateResponse = $maibMiaClient->rtpCreate($rtpData, $accessToken);
-print_r($rtpCreateResponse);
 ```

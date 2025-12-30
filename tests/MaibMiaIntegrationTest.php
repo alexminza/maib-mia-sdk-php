@@ -82,7 +82,9 @@ class MaibMiaIntegrationTest extends TestCase
             if ($t instanceof \GuzzleHttp\Command\Exception\CommandException) {
                 $response = $t->getResponse();
                 $responseBody = (string) $response->getBody();
-                $this->debugLog($responseBody, $t->getMessage());
+                $exceptionMessage = $t->getMessage();
+
+                $this->debugLog($responseBody, $exceptionMessage);
             }
         }
 
@@ -131,7 +133,7 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testAuthenticate
      */
-    public function testCreateDynamicQr()
+    public function testQrCreateDynamic()
     {
         $qrData = [
             'type' => 'Dynamic',
@@ -240,7 +242,7 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateDynamicQr
+     * @depends testQrCreateDynamic
      */
     public function testQrDetails()
     {
@@ -258,7 +260,7 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testAuthenticate
      */
-    public function testListQrCodes()
+    public function testQrList()
     {
         $params = [
             'count' => 10,
@@ -278,9 +280,9 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateDynamicQr
+     * @depends testQrCreateDynamic
      */
-    public function testPerformTestQrPayment()
+    public function testPay()
     {
         $testPayData = [
             'qrId' => self::$qrId,
@@ -304,7 +306,7 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testPerformTestQrPayment
+     * @depends testPay
      */
     public function testPaymentDetails()
     {
@@ -319,13 +321,13 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testPerformTestQrPayment
+     * @depends testPay
      */
-    public function testRefundPaymentPartial()
+    public function testPaymentRefundPartial()
     {
         $refundData = [
             'amount' => self::$qrData['amount'] / 2,
-            'reason' => 'testRefundPaymentPartial reason',
+            'reason' => 'testPaymentRefundPartial reason',
             'callbackUrl' => 'https://example.com/refund'
         ];
 
@@ -338,12 +340,12 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testRefundPaymentPartial
+     * @depends testPaymentRefundPartial
      */
-    public function testRefundPaymentFull()
+    public function testPaymentRefundFull()
     {
         $refundData = [
-            'reason' => 'testRefundPaymentFull reason',
+            'reason' => 'testPaymentRefundFull reason',
             'callbackUrl' => 'https://example.com/refund'
         ];
 
@@ -356,9 +358,9 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testRefundPaymentFull
+     * @depends testPaymentRefundFull
      */
-    public function testRefundPaymentError()
+    public function testPaymentRefundError()
     {
         $this->markTestSkipped();
 
@@ -375,9 +377,9 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testPerformTestQrPayment
+     * @depends testPay
      */
-    public function testListPayments()
+    public function testPaymentList()
     {
         $params = [
             'count' => 10,
@@ -398,7 +400,7 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testAuthenticate
      */
-    public function testCreateRtp()
+    public function testRtpCreate()
     {
         $rtpData = [
             'alias' => '37369112221',
@@ -423,7 +425,7 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateRtp
+     * @depends testRtpCreate
      */
     public function testRtpStatus()
     {
@@ -437,7 +439,7 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testAuthenticate
      */
-    public function testListRtp()
+    public function testRtpList()
     {
         $params = [
             'count' => 10,
@@ -455,9 +457,9 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateRtp
+     * @depends testRtpCreate
      */
-    public function testAcceptRtp()
+    public function testRtpTestAccept()
     {
         $acceptData = [
             'amount' => self::$rtpData['amount'],
@@ -474,12 +476,12 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testAcceptRtp
+     * @depends testRtpTestAccept
      */
-    public function testRefundRtpPayment()
+    public function testRtpRefund()
     {
         $refundData = [
-            'reason' => 'testRefundRtpPayment reason'
+            'reason' => 'testRtpRefund reason'
         ];
 
         $response = $this->client->rtpRefund(self::$rtpPayId, $refundData, self::$accessToken);
@@ -491,16 +493,16 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testCreateRtp
+     * @depends testRtpCreate
      */
-    public function testCancelRtp()
+    public function testRtpCancel()
     {
         $response = $this->client->rtpCreate(self::$rtpData, self::$accessToken);
         // $this->debugLog('rtpCreate', $response);
 
         $rtpId = $response['result']['rtpId'];
         $cancelData = [
-            'reason' => 'testCancelRtp reason'
+            'reason' => 'testRtpCancel reason'
         ];
 
         $response = $this->client->rtpCancel($rtpId, $cancelData, self::$accessToken);
