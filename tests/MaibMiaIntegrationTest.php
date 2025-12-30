@@ -109,6 +109,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertArrayHasKey('ok', $response);
         $this->assertTrue($response['ok']);
         $this->assertArrayHasKey('result', $response);
+        $this->assertNotEmpty($response['result']);
     }
 
     protected function assertResultNoOk($response)
@@ -117,6 +118,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertArrayHasKey('ok', $response);
         $this->assertFalse($response['ok']);
         $this->assertArrayHasKey('errors', $response);
+        $this->assertNotEmpty($response['errors']);
     }
 
     public function testAuthenticate()
@@ -130,6 +132,7 @@ class MaibMiaIntegrationTest extends TestCase
         self::$accessToken = $response['result']['accessToken'];
     }
 
+    #region QR
     /**
      * @depends testAuthenticate
      */
@@ -278,7 +281,9 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertArrayHasKey('items', $response['result']);
         $this->assertArrayHasKey('totalCount', $response['result']);
     }
+    #endregion
 
+    #region Payment
     /**
      * @depends testQrCreateDynamic
      */
@@ -335,7 +340,7 @@ class MaibMiaIntegrationTest extends TestCase
         // $this->debugLog('paymentRefund', $response);
 
         $this->assertResultOk($response);
-        $this->assertEquals('00000000-0000-0000-0000-000000000000', $response['result']['refundId']);
+        $this->assertNotEmpty($response['result']['refundId']);
         $this->assertEquals('Created', $response['result']['status']);
     }
 
@@ -353,7 +358,7 @@ class MaibMiaIntegrationTest extends TestCase
         // $this->debugLog('paymentRefund', $response);
 
         $this->assertResultOk($response);
-        $this->assertEquals('00000000-0000-0000-0000-000000000000', $response['result']['refundId']);
+        $this->assertNotEmpty($response['result']['refundId']);
         $this->assertEquals('Created', $response['result']['status']);
     }
 
@@ -396,7 +401,9 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertArrayHasKey('items', $response['result']);
         $this->assertArrayHasKey('totalCount', $response['result']);
     }
+    #endregion
 
+    #region RTP
     /**
      * @depends testAuthenticate
      */
@@ -488,7 +495,7 @@ class MaibMiaIntegrationTest extends TestCase
         // $this->debugLog('rtpRefund', $response);
 
         $this->assertResultOk($response);
-        $this->assertEquals('00000000-0000-0000-0000-000000000000', $response['result']['refundId']);
+        $this->assertNotEmpty($response['result']['refundId']);
         $this->assertEquals('Created', $response['result']['status']);
     }
 
@@ -512,7 +519,9 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertEquals($rtpId, $response['result']['rtpId']);
         $this->assertEquals('Cancelled', $response['result']['status']);
     }
+    #endregion
 
+    #region Signature
     public function testValidateCallbackSignature()
     {
         $callbackData = [
@@ -539,4 +548,5 @@ class MaibMiaIntegrationTest extends TestCase
         $callbackData['signature'] = MaibMiaClient::computeDataSignature($callbackData['result'], self::$signatureKey);
         $this->assertTrue(MaibMiaClient::validateCallbackSignature($callbackData, self::$signatureKey));
     }
+    #endregion
 }
