@@ -511,7 +511,6 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertEquals('Cancelled', $response['result']['status']);
     }
 
-
     public function testValidateCallbackSignature()
     {
         $callbackData = [

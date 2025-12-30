@@ -147,7 +147,13 @@ print_r($paymentDetailsResponse);
 ### Refund payment
 
 ```php
-$paymentRefundResponse = $maibMiaClient->paymentRefund($payId, 'Test refund reason', $accessToken);
+$refundData = [
+    'reason' => 'Test refund reason',
+    // 'amount' => 25.00, // Optional: for partial refund
+    // 'callbackUrl' => 'https://example.com/refund' // Optional
+];
+
+$paymentRefundResponse = $maibMiaClient->paymentRefund($payId, $refundData, $accessToken);
 print_r($paymentRefundResponse);
 ```
 
