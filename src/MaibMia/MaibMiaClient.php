@@ -175,6 +175,7 @@ class MaibMiaClient extends GuzzleClient
     public function testPay($testPayData, $authToken)
     {
         $args = $testPayData;
+
         self::setBearerAuthToken($args, $authToken);
         return parent::testPay($args);
     }
@@ -348,7 +349,10 @@ class MaibMiaClient extends GuzzleClient
      * Callback Payload Signature Key Verification
      * @param array  $callbackData
      * @param string $signatureKey
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/examples/signature-key-verification
      */
     public static function validateCallbackSignature($callbackData, $signatureKey)
     {
@@ -360,6 +364,15 @@ class MaibMiaClient extends GuzzleClient
         return hash_equals($expectedSignature, $computedResultSignature);
     }
 
+    /**
+     * Compute Payload Signature
+     * @param array  $callbackData
+     * @param string $signatureKey
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
+     * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
+     * @link https://docs.maibmerchants.md/request-to-pay/api-reference/examples/signature-key-verification
+     */
     public static function computeDataSignature($resultData, $signatureKey)
     {
         $keys = [];

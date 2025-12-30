@@ -36,7 +36,7 @@ class MaibMiaDescription extends Description
                     ],
                 ],
 
-                // Authentication Operations
+                #region Authentication Operations
                 'getToken' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -48,8 +48,9 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'AuthTokenDto']
                     ]
                 ],
+                #endregion
 
-                // QR Operations
+                #region QR Operations
                 'qrCreate' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -123,8 +124,9 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
+                #endregion
 
-                // Payment Operations
+                #region Payment Operations
                 'paymentRefund' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -140,8 +142,9 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'RefundDto']
                     ]
                 ],
+                #endregion
 
-                // Information Retrieval Operations
+                #region Information Retrieval Operations
                 'qrList' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -192,8 +195,9 @@ class MaibMiaDescription extends Description
                         'payId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ],
                 ],
+                #endregion
 
-                // Payment Simulation Operations
+                #region Payment Simulation Operations
                 'testPay' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -208,8 +212,9 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'TestPayDto']
                     ]
                 ],
+                #endregion
 
-                // RTP Operations
+                #region RTP Operations
                 'rtpCreate' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -279,8 +284,9 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
+                #endregion
 
-                // RTP Simulation Operations (Sandbox)
+                #region RTP Simulation Operations (Sandbox)
                 'rtpTestAccept' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -307,6 +313,7 @@ class MaibMiaDescription extends Description
                         'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ],
                 ],
+                #endregion
             ],
 
             'models' => [
