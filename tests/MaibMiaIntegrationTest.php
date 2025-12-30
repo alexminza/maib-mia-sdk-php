@@ -112,7 +112,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertNotEmpty($response['result']);
     }
 
-    protected function assertResultNoOk($response)
+    protected function assertResultNotOk($response)
     {
         $this->assertNotNull($response);
         $this->assertArrayHasKey('ok', $response);
@@ -377,7 +377,7 @@ class MaibMiaIntegrationTest extends TestCase
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
         // $this->debugLog('paymentRefund', $response);
 
-        $this->assertResultNoOk($response);
+        $this->assertResultNotOk($response);
         $this->assertEquals('payments.acquiring.payments-01001', $response['errors'][0]['errorCode']);
     }
 
