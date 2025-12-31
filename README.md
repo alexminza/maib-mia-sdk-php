@@ -3,6 +3,7 @@
 ![maib MIA](https://repository-images.githubusercontent.com/1076179057/9258aa73-ca53-4f17-9ee4-08b5e068ef47)
 
 * maib MIA QR API docs: https://docs.maibmerchants.md/mia-qr-api
+* maib Request to Pay (RTP) API docs: https://docs.maibmerchants.md/request-to-pay
 * GitHub project https://github.com/alexminza/maib-mia-sdk-php
 * Composer package https://packagist.org/packages/alexminza/maib-mia-sdk
 
@@ -88,8 +89,7 @@ $qrData = [
     'redirectUrl' => 'https://example.com/success'
 ];
 
-$createQrResponse = $maibMiaClient->createQr($qrData, $accessToken);
-print_r($createQrResponse);
+$qrCreateResponse = $maibMiaClient->qrCreate($qrData, $accessToken);
 ```
 
 ### Validate callback signature
@@ -116,13 +116,12 @@ $callbackBody = '{
 
 $callbackData = json_decode($callbackBody, true);
 $validationResult = MaibMiaClient::validateCallbackSignature($callbackData, $MAIB_MIA_SIGNATURE_KEY);
-print_r($validationResult);
 ```
 
 ### Perform a test QR payment
 
 ```php
-$qrId = $createQrResponse['result']['qrId'];
+$qrId = $qrCreateResponse['result']['qrId'];
 $testPayData = [
     'qrId' => $qrId,
     'amount' => 50.00,
@@ -132,7 +131,6 @@ $testPayData = [
 ];
 
 $testPayResponse = $maibMiaClient->testPay($testPayData, $accessToken);
-print_r($testPayResponse);
 ```
 
 ### Get payment details
@@ -140,12 +138,37 @@ print_r($testPayResponse);
 ```php
 $payId = $testPayResponse['result']['payId'];
 $paymentDetailsResponse = $maibMiaClient->paymentDetails($payId, $accessToken);
-print_r($paymentDetailsResponse);
 ```
 
 ### Refund payment
 
 ```php
-$paymentRefundResponse = $maibMiaClient->paymentRefund($payId, 'Test refund reason', $accessToken);
-print_r($paymentRefundResponse);
+$refundData = [
+    'reason' => 'Test refund reason',
+    // 'amount' => 25.00, // Optional: for partial refund
+    // 'callbackUrl' => 'https://example.com/refund' // Optional
+];
+
+$paymentRefundResponse = $maibMiaClient->paymentRefund($payId, $refundData, $accessToken);
+```
+
+### Create a Request to Pay (RTP)
+
+```php
+$validityMinutes = 60;
+$expiresAt = (new DateTime())->modify("+{$validityMinutes} minutes")->format('c');
+
+$rtpData = [
+    'alias' => '3736xxxxxxx',
+    'amount' => 150.00,
+    'expiresAt' => $expiresAt,
+    'currency' => 'MDL',
+    'description' => 'Invoice #123',
+    'orderId' => '123',
+    'terminalId' => 'P011111',
+    'callbackUrl' => 'https://example.com/callback',
+    'redirectUrl' => 'https://example.com/success'
+];
+
+$rtpCreateResponse = $maibMiaClient->rtpCreate($rtpData, $accessToken);
 ```

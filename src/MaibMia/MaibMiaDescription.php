@@ -3,11 +3,32 @@
 namespace Maib\MaibMia;
 
 use GuzzleHttp\Command\Guzzle\Description;
+use Composer\InstalledVersions;
 
 class MaibMiaDescription extends Description
 {
+    private const PACKAGE_NAME = 'alexminza/maib-mia-sdk';
+    private const DEFAULT_VERSION = 'dev';
+
+    private static function detectVersion(): string
+    {
+        if (!class_exists(InstalledVersions::class)) {
+            return self::DEFAULT_VERSION;
+        }
+
+        if (!InstalledVersions::isInstalled(self::PACKAGE_NAME)) {
+            return self::DEFAULT_VERSION;
+        }
+
+        return InstalledVersions::getPrettyVersion(self::PACKAGE_NAME)
+            ?? self::DEFAULT_VERSION;
+    }
+
     public function __construct(array $options = [])
     {
+        $version = self::detectVersion();
+        $userAgent = "maib-mia-sdk-php/$version";
+
         $authorizationHeader = [
             'type' => 'string',
             'location' => 'header',
@@ -22,8 +43,18 @@ class MaibMiaDescription extends Description
             'apiVersion' => 'v2',
 
             'operations' => [
-                // Authentication Operations
+                'baseOp' => [
+                    'parameters' => [
+                        'User-Agent' => [
+                            'location' => 'header',
+                            'default'  => $userAgent,
+                        ],
+                    ],
+                ],
+
+                #region Authentication Operations
                 'getToken' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/auth/token',
                     'summary' => 'Obtain Authentication Token',
@@ -33,9 +64,11 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'AuthTokenDto']
                     ]
                 ],
+                #endregion
 
-                // QR Operations
-                'createQr' => [
+                #region QR Operations
+                'qrCreate' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr',
                     'summary' => 'Create QR Code (Static, Dynamic)',
@@ -45,10 +78,11 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CreateQrDto']
+                        'schema' => ['$ref' => 'QrCreateDto']
                     ]
                 ],
-                'createHybridQr' => [
+                'qrCreateHybrid' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/hybrid',
                     'summary' => 'Create Hybrid QR Code',
@@ -58,10 +92,11 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CreateHybridQrDto']
+                        'schema' => ['$ref' => 'QrCreateHybridDto']
                     ]
                 ],
-                'createQrExtension' => [
+                'qrCreateExtension' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/extension',
                     'summary' => 'Create Extension for QR Code by ID',
@@ -72,10 +107,11 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CreateQrExtensionDto']
+                        'schema' => ['$ref' => 'QrCreateExtensionDto']
                     ]
                 ],
-                'cancelQr' => [
+                'qrCancel' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/cancel',
                     'summary' => 'Cancel Active QR (Static, Dynamic)',
@@ -86,10 +122,11 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
-                'cancelQrExtension' => [
+                'qrCancelExtension' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/qr/{qrId}/extension/cancel',
                     'summary' => 'Cancel Active QR Extension (Hybrid)',
@@ -100,14 +137,16 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'CancelDto']
                     ]
                 ],
+                #endregion
 
-                // Payment Operations
+                #region Payment Operations
                 'paymentRefund' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
-                    'uri' => '/v2/mia/payments/{payId}/refund',
+                    'uri' => '/v2/payments/{payId}/refund',
                     'summary' => 'Refund Completed Payment',
                     'responseModel' => 'getResponse',
                     'parameters' => [
@@ -116,12 +155,14 @@ class MaibMiaDescription extends Description
                     ],
                     'additionalParameters' => [
                         'location' => 'json',
-                        'schema' => ['$ref' => 'CancelQrDto']
+                        'schema' => ['$ref' => 'RefundDto']
                     ]
                 ],
+                #endregion
 
-                // Information Retrieval Operations
+                #region Information Retrieval Operations
                 'qrList' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/qr',
                     'summary' => 'Display List of QR Codes with Filtering Options',
@@ -135,6 +176,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'qrDetails' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/qr/{qrId}',
                     'summary' => 'Retrieve QR Details by ID',
@@ -145,6 +187,7 @@ class MaibMiaDescription extends Description
                     ],
                 ],
                 'paymentList' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/payments',
                     'summary' => 'Retrieve List of Payments with Filtering Options',
@@ -158,6 +201,7 @@ class MaibMiaDescription extends Description
                     ]
                 ],
                 'paymentDetails' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'GET',
                     'uri' => '/v2/mia/payments/{payId}',
                     'summary' => 'Retrieve Payment Details by ID',
@@ -167,9 +211,11 @@ class MaibMiaDescription extends Description
                         'payId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ],
                 ],
+                #endregion
 
-                // Payment Simulation Operations
+                #region Payment Simulation Operations
                 'testPay' => [
+                    'extends' => 'baseOp',
                     'httpMethod' => 'POST',
                     'uri' => '/v2/mia/test-pay',
                     'summary' => 'Payment Simulation (Sandbox)',
@@ -182,6 +228,108 @@ class MaibMiaDescription extends Description
                         'schema' => ['$ref' => 'TestPayDto']
                     ]
                 ],
+                #endregion
+
+                #region RTP Operations
+                'rtpCreate' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp',
+                    'summary' => 'Create a new payment request (RTP)',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'RtpCreateDto']
+                    ]
+                ],
+                'rtpStatus' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'GET',
+                    'uri' => '/v2/rtp/{rtpId}',
+                    'summary' => 'Retrieve the status of a payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                ],
+                'rtpCancel' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{rtpId}/cancel',
+                    'summary' => 'Cancel a pending payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'CancelDto']
+                    ]
+                ],
+                'rtpList' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'GET',
+                    'uri' => '/v2/rtp',
+                    'summary' => 'List all payment requests',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'query',
+                        'schema' => ['$ref' => 'RtpListDto']
+                    ]
+                ],
+                'rtpRefund' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{payId}/refund',
+                    'summary' => 'Initiate a refund for a completed payment',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'payId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'CancelDto']
+                    ]
+                ],
+                #endregion
+
+                #region RTP Simulation Operations (Sandbox)
+                'rtpTestAccept' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{rtpId}/test-accept',
+                    'summary' => 'Simulate acceptance of a payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                    'additionalParameters' => [
+                        'location' => 'json',
+                        'schema' => ['$ref' => 'RtpTestAcceptDto']
+                    ]
+                ],
+                'rtpTestReject' => [
+                    'extends' => 'baseOp',
+                    'httpMethod' => 'POST',
+                    'uri' => '/v2/rtp/{rtpId}/test-reject',
+                    'summary' => 'Simulate rejection of a payment request',
+                    'responseModel' => 'getResponse',
+                    'parameters' => [
+                        'authToken' => $authorizationHeader,
+                        'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
+                    ],
+                ],
+                #endregion
             ],
 
             'models' => [
@@ -199,7 +347,7 @@ class MaibMiaDescription extends Description
                         'clientSecret' => ['type' => 'string', 'required' => true],
                     ],
                 ],
-                'CreateQrDto' => [
+                'QrCreateDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -217,17 +365,17 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string'],
                     ],
                 ],
-                'CreateHybridQrDto' => [
+                'QrCreateHybridDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
                         'amountType' => ['type' => 'string', 'enum' => ['Fixed', 'Controlled', 'Free'], 'required' => true],
                         'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                         'terminalId' => ['type' => 'string'],
-                        'extension' => ['$ref' => 'CreateQrExtensionDto'],
+                        'extension' => ['$ref' => 'QrCreateExtensionDto'],
                     ],
                 ],
-                'CreateQrExtensionDto' => [
+                'QrCreateExtensionDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -241,11 +389,20 @@ class MaibMiaDescription extends Description
                         'redirectUrl' => ['type' => 'string'],
                     ],
                 ],
-                'CancelQrDto' => [
+                'CancelDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
                         'reason' => ['type' => 'string', 'required' => true],
+                    ],
+                ],
+                'RefundDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'amount' => ['type' => 'number'],
+                        'reason' => ['type' => 'string', 'required' => true],
+                        'callbackUrl' => ['type' => 'string'],
                     ],
                 ],
                 'QrListDto' => [
@@ -305,6 +462,49 @@ class MaibMiaDescription extends Description
                         'iban' => ['type' => 'string', 'required' => true],
                         'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                         'payerName' => ['type' => 'string', 'required' => true],
+                    ],
+                ],
+                'RtpCreateDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'alias' => ['type' => 'string', 'required' => true],
+                        'amount' => ['type' => 'number', 'required' => true],
+                        'expiresAt' => ['type' => 'string', 'format' => 'date-time', 'required' => true],
+                        'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
+                        'description' => ['type' => 'string', 'required' => true],
+                        'orderId' => ['type' => 'string'],
+                        'terminalId' => ['type' => 'string'],
+                        'callbackUrl' => ['type' => 'string'],
+                        'redirectUrl' => ['type' => 'string'],
+                    ],
+                ],
+                'RtpListDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'count' => ['type' => 'number', 'required' => true],
+                        'offset' => ['type' => 'number', 'required' => true],
+                        'sortBy' => ['type' => 'string', 'enum' => ['orderId', 'type', 'amount', 'status', 'createdAt', 'expiresAt']],
+                        'order' => ['type' => 'string', 'enum' => ['asc', 'desc']],
+                        'rtpId' => ['type' => 'string'],
+                        'orderId' => ['type' => 'string'],
+                        'amount' => ['type' => 'number'],
+                        'description' => ['type' => 'string'],
+                        'status' => ['type' => 'string', 'enum' => ['Created', 'Active', 'Cancelled', 'Accepted', 'Rejected', 'Expired']],
+                        'createdAtFrom' => ['type' => 'string', 'format' => 'date-time'],
+                        'createdAtTo' => ['type' => 'string', 'format' => 'date-time'],
+                        'expiresAtFrom' => ['type' => 'string', 'format' => 'date-time'],
+                        'expiresAtTo' => ['type' => 'string', 'format' => 'date-time'],
+                        'terminalId' => ['type' => 'string'],
+                    ],
+                ],
+                'RtpTestAcceptDto' => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'amount' => ['type' => 'number', 'required' => true],
+                        'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                     ],
                 ],
             ]

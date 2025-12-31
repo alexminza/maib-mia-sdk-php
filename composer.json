@@ -38,5 +38,15 @@
         "psr-4": {
             "Maib\\": "src/"
         }
+    },
+    "require-dev": {
+        "vlucas/phpdotenv": "*",
+        "phpunit/phpunit": "*",
+        "monolog/monolog": "*"
+    },
+    "config": {
+        "platform": {
+            "php": "7.2.5"
+        }
     }
 }
