@@ -275,29 +275,39 @@ class MaibMiaClient extends GuzzleClient
     #region Signature
     /**
      * Callback Payload Signature Key Verification
+     * @param array $callbackData  Callback message parsed JSON object
+     * @param string $signatureKey Merchant's shared secret key
+     * @return bool True if signature is valid, false otherwise
      * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/examples/signature-key-verification
      */
-    public static function validateCallbackSignature(array $callbackData, string $signatureKey)
+    public static function validateCallbackSignature(array $callbackData, string $signatureKey): bool
     {
         $resultData = $callbackData['result'] ?? [];
-        $expectedSignature = $callbackData['signature'] ?? '';
+        $callbackSignature = $callbackData['signature'] ?? '';
+
+        // Validate required data exists
+        if (empty($resultData) || empty($callbackSignature)) {
+            return false;
+        }
 
         // Compare the result with the signature
-        $computedResultSignature = self::computeDataSignature($resultData, $signatureKey);
-        return hash_equals($expectedSignature, $computedResultSignature);
+        $computedSignature = self::computeDataSignature($resultData, $signatureKey);
+        return hash_equals($computedSignature, $callbackSignature);
     }
 
     /**
      * Compute Payload Signature
+     * @param array  $resultData The result data from callback payload
+     * @param string $signatureKey Merchant's shared secret key
      * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/examples/signature-key-verification
      */
-    public static function computeDataSignature(array $resultData, string $signatureKey)
+    public static function computeDataSignature(array $resultData, string $signatureKey): string
     {
         $keys = [];
         foreach ($resultData as $key => $value) {
