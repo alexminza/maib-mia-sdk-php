@@ -7,10 +7,26 @@ use Composer\InstalledVersions;
 
 class MaibMiaDescription extends Description
 {
+    private const PACKAGE_NAME = 'alexminza/maib-mia-sdk';
+    private const DEFAULT_VERSION = 'dev';
+
+    private static function detectVersion(): string
+    {
+        if (!class_exists(InstalledVersions::class)) {
+            return self::DEFAULT_VERSION;
+        }
+
+        if (!InstalledVersions::isInstalled(self::PACKAGE_NAME)) {
+            return self::DEFAULT_VERSION;
+        }
+
+        return InstalledVersions::getPrettyVersion(self::PACKAGE_NAME)
+            ?? self::DEFAULT_VERSION;
+    }
+
     public function __construct(array $options = [])
     {
-        $package = 'alexminza/maib-mia-sdk';
-        $version = InstalledVersions::getPrettyVersion($package) ?? 'dev';
+        $version = self::detectVersion();
         $userAgent = "maib-mia-sdk-php/$version";
 
         $authorizationHeader = [
