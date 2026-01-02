@@ -81,7 +81,7 @@ class MaibMiaIntegrationTest extends TestCase
             // https://github.com/guzzle/guzzle/issues/2185
             if ($t instanceof \GuzzleHttp\Command\Exception\CommandException) {
                 $response = $t->getResponse();
-                $responseBody = (string) $response->getBody();
+                $responseBody = !empty($response) ? (string) $response->getBody() : '';
                 $exceptionMessage = $t->getMessage();
 
                 $this->debugLog($responseBody, $exceptionMessage);
