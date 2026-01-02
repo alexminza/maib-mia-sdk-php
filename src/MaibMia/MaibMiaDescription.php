@@ -5,6 +5,11 @@ namespace Maib\MaibMia;
 use GuzzleHttp\Command\Guzzle\Description;
 use Composer\InstalledVersions;
 
+/**
+ * maib MIA API service description
+ * @link https://docs.maibmerchants.md/mia-qr-api
+ * @link https://docs.maibmerchants.md/request-to-pay
+ */
 class MaibMiaDescription extends Description
 {
     private const PACKAGE_NAME = 'alexminza/maib-mia-sdk';
@@ -33,13 +38,13 @@ class MaibMiaDescription extends Description
             'type' => 'string',
             'location' => 'header',
             'sentAs' => 'Authorization',
-            'summary' => 'Bearer Authentication with JWT Token',
+            'description' => 'Bearer Authentication with JWT Token',
             'required' => true,
         ];
 
         $description = [
-            //'baseUrl' => 'https://api.maibmerchants.md/',
-            'name' => 'maib MIA QR API',
+            // 'baseUrl' => 'https://api.maibmerchants.md/',
+            'name' => 'maib MIA API',
             'apiVersion' => 'v2',
 
             'operations' => [
@@ -333,12 +338,16 @@ class MaibMiaDescription extends Description
             ],
 
             'models' => [
+                #region Generic Models
                 'getResponse' => [
                     'type' => 'object',
                     'additionalProperties' => [
                         'location' => 'json'
                     ]
                 ],
+                #endregion
+
+                #region Schema-based Models
                 'AuthTokenDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -507,6 +516,7 @@ class MaibMiaDescription extends Description
                         'currency' => ['type' => 'string', 'enum' => ['MDL'], 'required' => true],
                     ],
                 ],
+                #endregion
             ]
         ];
 

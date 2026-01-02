@@ -3,8 +3,8 @@
 namespace Maib\MaibMia\Tests;
 
 use Maib\MaibMia\MaibMiaClient;
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
@@ -40,12 +40,12 @@ class MaibMiaIntegrationTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$clientId = getenv('MAIB_MIA_CLIENT_ID');
+        self::$clientId     = getenv('MAIB_MIA_CLIENT_ID');
         self::$clientSecret = getenv('MAIB_MIA_CLIENT_SECRET');
         self::$signatureKey = getenv('MAIB_MIA_SIGNATURE_KEY');
-        self::$baseUrl = MaibMiaClient::SANDBOX_BASE_URL;
+        self::$baseUrl      = MaibMiaClient::SANDBOX_BASE_URL;
 
-        if (!self::$clientId || !self::$clientSecret || !self::$signatureKey) {
+        if (empty(self::$clientId) || empty(self::$clientSecret) || empty(self::$signatureKey)) {
             self::markTestSkipped('Integration test credentials not provided.');
         }
     }
@@ -105,7 +105,7 @@ class MaibMiaIntegrationTest extends TestCase
 
     protected function assertResultOk($response)
     {
-        $this->assertNotNull($response);
+        $this->assertNotEmpty($response);
         $this->assertArrayHasKey('ok', $response);
         $this->assertTrue($response['ok']);
         $this->assertArrayHasKey('result', $response);
@@ -114,7 +114,7 @@ class MaibMiaIntegrationTest extends TestCase
 
     protected function assertResultNotOk($response)
     {
-        $this->assertNotNull($response);
+        $this->assertNotEmpty($response);
         $this->assertArrayHasKey('ok', $response);
         $this->assertFalse($response['ok']);
         $this->assertArrayHasKey('errors', $response);

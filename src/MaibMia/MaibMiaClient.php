@@ -11,6 +11,7 @@ use GuzzleHttp\Command\Result;
 /**
  * maib MIA API client
  * @link https://docs.maibmerchants.md/mia-qr-api
+ * @link https://docs.maibmerchants.md/request-to-pay
  */
 class MaibMiaClient extends GuzzleClient
 {
