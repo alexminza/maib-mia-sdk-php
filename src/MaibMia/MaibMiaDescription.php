@@ -348,6 +348,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region Schema-based Models
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/authentication/obtain-authentication-token#request-parameters-body
                 'AuthTokenDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -356,6 +357,7 @@ class MaibMiaDescription extends Description
                         'clientSecret' => ['type' => 'string', 'required' => true],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic#request-parameters-body
                 'QrCreateDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -374,6 +376,7 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code#request-body-parameters
                 'QrCreateHybridDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -384,6 +387,7 @@ class MaibMiaDescription extends Description
                         'extension' => ['$ref' => 'QrCreateExtensionDto'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code/create-extension-for-qr-code-by-id#request-parameters-body
                 'QrCreateExtensionDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -398,6 +402,8 @@ class MaibMiaDescription extends Description
                         'redirectUrl' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic#requests-parameters-body
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid#request-parameters-body
                 'CancelDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -405,6 +411,7 @@ class MaibMiaDescription extends Description
                         'reason' => ['type' => 'string', 'required' => true],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment#request-parameters
                 'RefundDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -414,6 +421,7 @@ class MaibMiaDescription extends Description
                         'callbackUrl' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options#request-parameters-query
                 'QrListDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -438,6 +446,7 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-list-of-payments-with-filtering-options
                 'PaymentListDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -462,6 +471,7 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox#request-parameters-body-json
                 'TestPayDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -473,6 +483,7 @@ class MaibMiaDescription extends Description
                         'payerName' => ['type' => 'string', 'required' => true],
                     ],
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/create-a-new-payment-request-rtp#request-body-parameters
                 'RtpCreateDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -488,6 +499,7 @@ class MaibMiaDescription extends Description
                         'redirectUrl' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/list-all-payment-requests#query-parameters
                 'RtpListDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
@@ -508,6 +520,7 @@ class MaibMiaDescription extends Description
                         'terminalId' => ['type' => 'string'],
                     ],
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-acceptance-of-a-payment-request#request-body-parameters
                 'RtpTestAcceptDto' => [
                     'type' => 'object',
                     'additionalProperties' => false,
