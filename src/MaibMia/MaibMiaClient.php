@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Maib\MaibMia;
 
 use GuzzleHttp\Client;
@@ -10,6 +12,7 @@ use GuzzleHttp\Command\Result;
 
 /**
  * maib MIA API client
+ *
  * @link https://docs.maibmerchants.md/mia-qr-api
  * @link https://docs.maibmerchants.md/request-to-pay
  */
@@ -28,6 +31,7 @@ class MaibMiaClient extends GuzzleClient
     #region Auth
     /**
      * Obtain Authentication Token
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/authentication/obtain-authentication-token
      * @link https://docs.maibmerchants.md/mia-qr-api/en/overview/general-technical-specifications#authentication
      */
@@ -45,6 +49,7 @@ class MaibMiaClient extends GuzzleClient
     #region QR
     /**
      * Create QR Code (Static, Dynamic)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
      */
     public function qrCreate(array $qrData, string $authToken): Result
@@ -56,6 +61,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Create Hybrid QR Code
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code
      */
     public function qrCreateHybrid(array $qrData, string $authToken): Result
@@ -67,6 +73,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Create Extension for QR Code by ID
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code/create-extension-for-qr-code-by-id
      */
     public function qrCreateExtension(string $qrId, array $qrData, string $authToken): Result
@@ -80,6 +87,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Retrieve QR Details by ID
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
      */
     public function qrDetails(string $qrId, string $authToken): Result
@@ -94,6 +102,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Cancel Active QR (Static, Dynamic)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic
      */
     public function qrCancel(string $qrId, array $cancelData, string $authToken): Result
@@ -107,6 +116,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Cancel Active QR Extension (Hybrid)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid
      */
     public function qrCancelExtension(string $qrId, array $cancelData, string $authToken): Result
@@ -120,6 +130,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Display List of QR Codes with Filtering Options
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
      */
     public function qrList(array $qrListData, string $authToken): Result
@@ -133,6 +144,7 @@ class MaibMiaClient extends GuzzleClient
     #region Payment
     /**
      * Payment Simulation (Sandbox)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
      */
     public function testPay(array $testPayData, string $authToken): Result
@@ -145,6 +157,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Retrieve Payment Details by ID
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
      */
     public function paymentDetails(string $payId, string $authToken): Result
@@ -159,6 +172,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Refund Completed Payment
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
      */
     public function paymentRefund(string $payId, array $refundData, string $authToken): Result
@@ -172,6 +186,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Retrieve List of Payments with Filtering Options
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-list-of-payments-with-filtering-options
      */
     public function paymentList(array $paymentListData, string $authToken): Result
@@ -185,6 +200,7 @@ class MaibMiaClient extends GuzzleClient
     #region RTP
     /**
      * Create a new payment request (RTP)
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/create-a-new-payment-request-rtp
      */
     public function rtpCreate(array $rtpData, string $authToken): Result
@@ -196,6 +212,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Retrieve the status of a payment request
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/retrieve-the-status-of-a-payment-request
      */
     public function rtpStatus(string $rtpId, string $authToken): Result
@@ -210,6 +227,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Cancel a pending payment request
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/cancel-a-pending-payment-request
      */
     public function rtpCancel(string $rtpId, array $cancelData, string $authToken): Result
@@ -223,6 +241,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * List all payment requests
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/list-all-payment-requests
      */
     public function rtpList(array $rtpListData, string $authToken): Result
@@ -234,6 +253,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Initiate a refund for a completed payment
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/initiate-a-refund-for-a-completed-payment
      */
     public function rtpRefund(string $payId, array $refundData, string $authToken): Result
@@ -247,6 +267,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Simulate acceptance of a payment request (Sandbox)
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-acceptance-of-a-payment-request
      */
     public function rtpTestAccept(string $rtpId, array $testAcceptData, string $authToken): Result
@@ -260,6 +281,7 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Simulate rejection of a payment request (Sandbox)
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-rejection-of-a-payment-request
      */
     public function rtpTestReject(string $rtpId, string $authToken): Result
@@ -276,9 +298,12 @@ class MaibMiaClient extends GuzzleClient
     #region Signature
     /**
      * Callback Payload Signature Key Verification
+     *
      * @param array $callbackData  Callback message parsed JSON object
      * @param string $signatureKey Merchant's shared secret key
+     *
      * @return bool True if signature is valid, false otherwise
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
@@ -301,8 +326,10 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Compute Payload Signature
+     *
      * @param array  $resultData The result data from callback payload
      * @param string $signatureKey Merchant's shared secret key
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
@@ -318,9 +345,9 @@ class MaibMiaClient extends GuzzleClient
 
             // Format "amount" and "commission" with 2 decimal places
             if ($key === 'amount' || $key === 'commission') {
-                $valueStr = number_format((float)$value, 2, '.', '');
+                $valueStr = number_format( (float) $value, 2, '.', '');
             } else {
-                $valueStr = (string)$value;
+                $valueStr = (string) $value;
             }
 
             if (trim($valueStr) !== '') {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Maib\MaibMia\Tests;
 
 use Maib\MaibMia\MaibMiaClient;

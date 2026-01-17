@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Maib\MaibMia;
 
 use GuzzleHttp\Command\Guzzle\Description;
@@ -7,6 +9,7 @@ use Composer\InstalledVersions;
 
 /**
  * maib MIA API service description
+ *
  * @link https://docs.maibmerchants.md/mia-qr-api
  * @link https://docs.maibmerchants.md/request-to-pay
  */
