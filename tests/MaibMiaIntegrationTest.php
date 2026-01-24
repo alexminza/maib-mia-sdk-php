@@ -16,6 +16,7 @@ class MaibMiaIntegrationTest extends TestCase
     protected static $clientId;
     protected static $clientSecret;
     protected static $signatureKey;
+    protected static $callbackUrl;
     protected static $baseUrl;
 
     // Shared state
@@ -45,6 +46,7 @@ class MaibMiaIntegrationTest extends TestCase
         self::$clientId     = getenv('MAIB_MIA_CLIENT_ID');
         self::$clientSecret = getenv('MAIB_MIA_CLIENT_SECRET');
         self::$signatureKey = getenv('MAIB_MIA_SIGNATURE_KEY');
+        self::$callbackUrl  = getenv('MAIB_MIA_CALLBACK_URL');
         self::$baseUrl      = MaibMiaClient::SANDBOX_BASE_URL;
 
         if (empty(self::$clientId) || empty(self::$clientSecret) || empty(self::$signatureKey)) {
@@ -148,8 +150,8 @@ class MaibMiaIntegrationTest extends TestCase
             'currency' => 'MDL',
             'orderId' => '123',
             'description' => 'Order #123',
-            'callbackUrl' => 'https://example.com/callback',
-            'redirectUrl' => 'https://example.com/success'
+            'callbackUrl' => self::$callbackUrl . '/callback',
+            'redirectUrl' => self::$callbackUrl . '/success'
         ];
 
         $response = $this->client->qrCreate($qrData, self::$accessToken);
@@ -176,8 +178,8 @@ class MaibMiaIntegrationTest extends TestCase
                 'amount' => 50.00,
                 'description' => 'Order #123',
                 'orderId' => '123',
-                'callbackUrl' => 'https://example.com/callback',
-                'redirectUrl' => 'https://example.com/success'
+                'callbackUrl' => self::$callbackUrl . '/callback',
+                'redirectUrl' => self::$callbackUrl . '/success'
             ]
         ];
 
@@ -203,8 +205,8 @@ class MaibMiaIntegrationTest extends TestCase
             'amount' => 100.00,
             'description' => 'Updated Order #456 description',
             'orderId' => '456',
-            'callbackUrl' => 'https://example.com/callback',
-            'redirectUrl' => 'https://example.com/success'
+            'callbackUrl' => self::$callbackUrl . '/callback',
+            'redirectUrl' => self::$callbackUrl . '/success'
         ];
 
         $response = $this->client->qrCreateExtension(self::$hybridQrId, $extensionData, self::$accessToken);
@@ -335,7 +337,7 @@ class MaibMiaIntegrationTest extends TestCase
         $refundData = [
             'amount' => self::$qrData['amount'] / 2,
             'reason' => 'testPaymentRefundPartial reason',
-            'callbackUrl' => 'https://example.com/refund'
+            'callbackUrl' => self::$callbackUrl . '/refund'
         ];
 
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
@@ -353,7 +355,7 @@ class MaibMiaIntegrationTest extends TestCase
     {
         $refundData = [
             'reason' => 'testPaymentRefundFull reason',
-            'callbackUrl' => 'https://example.com/refund'
+            'callbackUrl' => self::$callbackUrl . '/refund'
         ];
 
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
@@ -373,7 +375,7 @@ class MaibMiaIntegrationTest extends TestCase
 
         $refundData = [
             'reason' => 'testRefundPaymentError reason',
-            'callbackUrl' => 'https://example.com/refund'
+            'callbackUrl' => self::$callbackUrl . '/refund'
         ];
 
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
@@ -419,8 +421,8 @@ class MaibMiaIntegrationTest extends TestCase
             'description' => 'Invoice #123',
             'orderId' => '123',
             'terminalId' => 'P011111',
-            'callbackUrl' => 'https://example.com/callback',
-            'redirectUrl' => 'https://example.com/success'
+            'callbackUrl' => self::$callbackUrl . '/callback',
+            'redirectUrl' => self::$callbackUrl . '/success'
         ];
 
         $response = $this->client->rtpCreate($rtpData, self::$accessToken);
