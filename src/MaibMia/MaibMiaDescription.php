@@ -475,9 +475,13 @@ class MaibMiaDescription extends Description
     private static function getProperties(array $models, string $modelName, string $location = 'json'): array
     {
         $props = $models[$modelName]['properties'] ?? [];
-        foreach ($props as &$prop) {
+        $result = [];
+
+        foreach ($props as $name => $prop) {
             $prop['location'] = $location;
+            $result[$name] = $prop;
         }
-        return $props;
+
+        return $result;
     }
 }
