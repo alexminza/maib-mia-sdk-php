@@ -167,6 +167,32 @@ class MaibMiaIntegrationTest extends TestCase
     /**
      * @depends testAuthenticate
      */
+    public function testQrCreateDynamicValidationError()
+    {
+        $qrData = [
+            'type' => 'Dynamic',
+            'expiresAt' => $this->expiresAt,
+            'amountType' => 'Fixed',
+            'amount' => 50.00,
+            'currencyABC' => 'MDL', // Invalid field
+            'callbackUrl' => self::$callbackUrl . '/callback',
+        ];
+
+        try {
+            $this->expectException(\GuzzleHttp\Command\Exception\CommandException::class);
+            $this->expectExceptionMessage('[currency] is a required string');
+
+            $response = $this->client->qrCreate($qrData, self::$accessToken);
+            $this->debugLog('qrCreate', $response);
+        } catch(\Exception $ex) {
+            $this->debugLog('qrCreate', $ex->getMessage());
+            throw $ex;
+        }
+    }
+
+    /**
+     * @depends testAuthenticate
+     */
     public function testQrCreateHybrid()
     {
         $hybridData = [
