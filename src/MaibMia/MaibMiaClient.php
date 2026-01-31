@@ -29,7 +29,7 @@ class MaibMiaClient extends GuzzleClient
         parent::__construct($client, $description, null, null, null, $config);
     }
 
-    #region Auth
+    #region Authentication
     /**
      * Obtain Authentication Token
      *
@@ -356,7 +356,7 @@ class MaibMiaClient extends GuzzleClient
     }
     #endregion
 
-    #region Util
+    #region Utility
     private static function setBearerAuthToken(array &$args, string $authToken)
     {
         $args['authToken'] = "Bearer $authToken";
