@@ -23,8 +23,9 @@ class MaibMiaClient extends GuzzleClient
 
     public function __construct(?ClientInterface $client = null, ?DescriptionInterface $description = null, array $config = [])
     {
-        $client = $client ?? new Client();
+        $client      = $client ?? new Client();
         $description = $description ?? new MaibMiaDescription($config);
+
         parent::__construct($client, $description, null, null, null, $config);
     }
 
@@ -37,12 +38,12 @@ class MaibMiaClient extends GuzzleClient
      */
     public function getToken(string $clientId, string $clientSecret): Result
     {
-        $args = [
+        $getTokenData = [
             'clientId' => $clientId,
             'clientSecret' => $clientSecret
         ];
 
-        return parent::getToken($args);
+        return parent::getToken($getTokenData);
     }
     #endregion
 
@@ -54,9 +55,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrCreate(array $qrData, string $authToken): Result
     {
-        $args = $qrData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCreate($args);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::qrCreate($qrData);
     }
 
     /**
@@ -66,9 +66,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrCreateHybrid(array $qrData, string $authToken): Result
     {
-        $args = $qrData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCreateHybrid($args);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::qrCreateHybrid($qrData);
     }
 
     /**
@@ -78,11 +77,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrCreateExtension(string $qrId, array $qrData, string $authToken): Result
     {
-        $args = $qrData;
-        $args['qrId'] = $qrId;
+        $qrData['qrId'] = $qrId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCreateExtension($args);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::qrCreateExtension($qrData);
     }
 
     /**
@@ -92,12 +90,12 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrDetails(string $qrId, string $authToken): Result
     {
-        $args = [
+        $qrDetailsData = [
             'qrId' => $qrId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrDetails($args);
+        self::setBearerAuthToken($qrDetailsData, $authToken);
+        return parent::qrDetails($qrDetailsData);
     }
 
     /**
@@ -107,11 +105,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrCancel(string $qrId, array $cancelData, string $authToken): Result
     {
-        $args = $cancelData;
-        $args['qrId'] = $qrId;
+        $cancelData['qrId'] = $qrId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCancel($args);
+        self::setBearerAuthToken($cancelData, $authToken);
+        return parent::qrCancel($cancelData);
     }
 
     /**
@@ -121,11 +118,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrCancelExtension(string $qrId, array $cancelData, string $authToken): Result
     {
-        $args = $cancelData;
-        $args['qrId'] = $qrId;
+        $cancelData['qrId'] = $qrId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCancelExtension($args);
+        self::setBearerAuthToken($cancelData, $authToken);
+        return parent::qrCancelExtension($cancelData);
     }
 
     /**
@@ -135,9 +131,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function qrList(array $qrListData, string $authToken): Result
     {
-        $args = $qrListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrList($args);
+        self::setBearerAuthToken($qrListData, $authToken);
+        return parent::qrList($qrListData);
     }
     #endregion
 
@@ -149,10 +144,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function testPay(array $testPayData, string $authToken): Result
     {
-        $args = $testPayData;
-
-        self::setBearerAuthToken($args, $authToken);
-        return parent::testPay($args);
+        self::setBearerAuthToken($testPayData, $authToken);
+        return parent::testPay($testPayData);
     }
 
     /**
@@ -162,12 +155,12 @@ class MaibMiaClient extends GuzzleClient
      */
     public function paymentDetails(string $payId, string $authToken): Result
     {
-        $args = [
+        $paymentDetailsData = [
             'payId' => $payId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentDetails($args);
+        self::setBearerAuthToken($paymentDetailsData, $authToken);
+        return parent::paymentDetails($paymentDetailsData);
     }
 
     /**
@@ -177,11 +170,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function paymentRefund(string $payId, array $refundData, string $authToken): Result
     {
-        $args = $refundData;
-        $args['payId'] = $payId;
+        $refundData['payId'] = $payId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentRefund($args);
+        self::setBearerAuthToken($refundData, $authToken);
+        return parent::paymentRefund($refundData);
     }
 
     /**
@@ -191,9 +183,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function paymentList(array $paymentListData, string $authToken): Result
     {
-        $args = $paymentListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentList($args);
+        self::setBearerAuthToken($paymentListData, $authToken);
+        return parent::paymentList($paymentListData);
     }
     #endregion
 
@@ -205,9 +196,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpCreate(array $rtpData, string $authToken): Result
     {
-        $args = $rtpData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpCreate($args);
+        self::setBearerAuthToken($rtpData, $authToken);
+        return parent::rtpCreate($rtpData);
     }
 
     /**
@@ -217,12 +207,12 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpStatus(string $rtpId, string $authToken): Result
     {
-        $args = [
+        $rtpStatusData = [
             'rtpId' => $rtpId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpStatus($args);
+        self::setBearerAuthToken($rtpStatusData, $authToken);
+        return parent::rtpStatus($rtpStatusData);
     }
 
     /**
@@ -232,11 +222,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpCancel(string $rtpId, array $cancelData, string $authToken): Result
     {
-        $args = $cancelData;
-        $args['rtpId'] = $rtpId;
+        $cancelData['rtpId'] = $rtpId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpCancel($args);
+        self::setBearerAuthToken($cancelData, $authToken);
+        return parent::rtpCancel($cancelData);
     }
 
     /**
@@ -246,9 +235,8 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpList(array $rtpListData, string $authToken): Result
     {
-        $args = $rtpListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpList($args);
+        self::setBearerAuthToken($rtpListData, $authToken);
+        return parent::rtpList($rtpListData);
     }
 
     /**
@@ -258,11 +246,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpRefund(string $payId, array $refundData, string $authToken): Result
     {
-        $args = $refundData;
-        $args['payId'] = $payId;
+        $refundData['payId'] = $payId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpRefund($args);
+        self::setBearerAuthToken($refundData, $authToken);
+        return parent::rtpRefund($refundData);
     }
 
     /**
@@ -272,11 +259,10 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpTestAccept(string $rtpId, array $testAcceptData, string $authToken): Result
     {
-        $args = $testAcceptData;
-        $args['rtpId'] = $rtpId;
+        $testAcceptData['rtpId'] = $rtpId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpTestAccept($args);
+        self::setBearerAuthToken($testAcceptData, $authToken);
+        return parent::rtpTestAccept($testAcceptData);
     }
 
     /**
@@ -286,12 +272,12 @@ class MaibMiaClient extends GuzzleClient
      */
     public function rtpTestReject(string $rtpId, string $authToken): Result
     {
-        $args = [
+        $testRejectData = [
             'rtpId' => $rtpId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpTestReject($args);
+        self::setBearerAuthToken($testRejectData, $authToken);
+        return parent::rtpTestReject($testRejectData);
     }
     #endregion
 
@@ -311,7 +297,7 @@ class MaibMiaClient extends GuzzleClient
      */
     public static function validateCallbackSignature(array $callbackData, string $signatureKey): bool
     {
-        $resultData = $callbackData['result'] ?? [];
+        $resultData        = $callbackData['result'] ?? [];
         $callbackSignature = $callbackData['signature'] ?? '';
 
         // Validate required data exists
@@ -345,9 +331,9 @@ class MaibMiaClient extends GuzzleClient
 
             // Format "amount" and "commission" with 2 decimal places
             if ($key === 'amount' || $key === 'commission') {
-                $valueStr = number_format( (float) $value, 2, '.', '');
+                $valueStr = number_format(floatval($value), 2, '.', '');
             } else {
-                $valueStr = (string) $value;
+                $valueStr = strval($value);
             }
 
             if (trim($valueStr) !== '') {
@@ -360,10 +346,10 @@ class MaibMiaClient extends GuzzleClient
 
         // Build the string to hash
         $additionalString = implode(':', $keys);
-        $hashInput = $additionalString . ':' . $signatureKey;
+        $hashInput        = $additionalString . ':' . $signatureKey;
 
         // Generate SHA256 hash and base64-encode it
-        $hash = hash('sha256', $hashInput, true);
+        $hash   = hash('sha256', $hashInput, true);
         $result = base64_encode($hash);
 
         return $result;

@@ -46,7 +46,7 @@ class MaibMiaIntegrationTest extends TestCase
         self::$clientId     = getenv('MAIB_MIA_CLIENT_ID');
         self::$clientSecret = getenv('MAIB_MIA_CLIENT_SECRET');
         self::$signatureKey = getenv('MAIB_MIA_SIGNATURE_KEY');
-        self::$callbackUrl  = getenv('MAIB_MIA_CALLBACK_URL');
+        self::$callbackUrl  = getenv('MAIB_MIA_CALLBACK_URL') ?: 'https://example.com';
         self::$baseUrl      = MaibMiaClient::SANDBOX_BASE_URL;
 
         if (empty(self::$clientId) || empty(self::$clientSecret) || empty(self::$signatureKey)) {
@@ -62,8 +62,8 @@ class MaibMiaIntegrationTest extends TestCase
         ];
 
         #region Logging
-        $classParts = explode('\\', self::class);
-        $logName = end($classParts) . '_guzzle';
+        $classParts  = explode('\\', self::class);
+        $logName     = end($classParts) . '_guzzle';
         $logFileName = "$logName.log";
 
         $log = new \Monolog\Logger($logName);
@@ -75,7 +75,7 @@ class MaibMiaIntegrationTest extends TestCase
         $options['handler'] = $stack;
         #endregion
 
-        $this->client = new MaibMiaClient(new Client($options));
+        $this->client    = new MaibMiaClient(new Client($options));
         $this->expiresAt = (new \DateTime())->modify('+1 hour')->format('c');
     }
 
@@ -84,8 +84,8 @@ class MaibMiaIntegrationTest extends TestCase
         if ($this->isDebugMode()) {
             // https://github.com/guzzle/guzzle/issues/2185
             if ($t instanceof \GuzzleHttp\Command\Exception\CommandException) {
-                $response = $t->getResponse();
-                $responseBody = !empty($response) ? (string) $response->getBody() : '';
+                $response         = $t->getResponse();
+                $responseBody     = !empty($response) ? strval($response->getBody()) : '';
                 $exceptionMessage = $t->getMessage();
 
                 $this->debugLog($responseBody, $exceptionMessage);
@@ -160,7 +160,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertResultOk($response);
         $this->assertNotEmpty($response['result']['qrId']);
 
-        self::$qrId = $response['result']['qrId'];
+        self::$qrId   = $response['result']['qrId'];
         self::$qrData = $qrData;
     }
 
@@ -216,9 +216,9 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertNotEmpty($response['result']['qrId']);
         $this->assertNotEmpty($response['result']['extensionId']);
 
-        self::$hybridQrId = $response['result']['qrId'];
+        self::$hybridQrId          = $response['result']['qrId'];
         self::$hybridQrExtensionId = $response['result']['extensionId'];
-        self::$hybridQrData = $hybridData;
+        self::$hybridQrData        = $hybridData;
     }
 
     /**
@@ -457,7 +457,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertResultOk($response);
         $this->assertNotEmpty($response['result']['rtpId']);
 
-        self::$rtpId = $response['result']['rtpId'];
+        self::$rtpId   = $response['result']['rtpId'];
         self::$rtpData = $rtpData;
     }
 
@@ -485,6 +485,7 @@ class MaibMiaIntegrationTest extends TestCase
             'sortBy' => 'createdAt',
             'order' => 'desc'
         ];
+
         $response = $this->client->rtpList($params, self::$accessToken);
         // $this->debugLog('rtpList', $response);
 
@@ -538,6 +539,7 @@ class MaibMiaIntegrationTest extends TestCase
         // $this->debugLog('rtpCreate', $response);
 
         $rtpId = $response['result']['rtpId'];
+
         $cancelData = [
             'reason' => 'testRtpCancel reason'
         ];
