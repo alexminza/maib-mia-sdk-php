@@ -243,6 +243,7 @@ class MaibMiaDescription extends Description
                 ],
 
                 #region Authentication Operations
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/authentication/obtain-authentication-token
                 'getToken' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -254,6 +255,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region QR Operations
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
                 'qrCreate' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -264,6 +266,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ], self::getProperties($models, 'QrCreateDto')),
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code
                 'qrCreateHybrid' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -274,6 +277,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ], self::getProperties($models, 'QrCreateHybridDto')),
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code/create-extension-for-qr-code-by-id
                 'qrCreateExtension' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -285,6 +289,7 @@ class MaibMiaDescription extends Description
                         'qrId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ], self::getProperties($models, 'QrCreateExtensionDto')),
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic
                 'qrCancel' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -296,6 +301,7 @@ class MaibMiaDescription extends Description
                         'qrId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ], self::getProperties($models, 'CancelDto')),
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid
                 'qrCancelExtension' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -310,6 +316,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region Payment Operations
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
                 'paymentRefund' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -324,6 +331,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region Information Retrieval Operations
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
                 'qrList' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -334,6 +342,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ], self::getProperties($models, 'QrListDto', 'query')),
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
                 'qrDetails' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -345,6 +354,7 @@ class MaibMiaDescription extends Description
                         'qrId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ],
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-list-of-payments-with-filtering-options
                 'paymentList' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -355,6 +365,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ], self::getProperties($models, 'PaymentListDto', 'query')),
                 ],
+                // https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
                 'paymentDetails' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -369,6 +380,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region Payment Simulation Operations
+                // https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
                 'testPay' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -382,6 +394,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region RTP Operations
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/create-a-new-payment-request-rtp
                 'rtpCreate' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -392,6 +405,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ], self::getProperties($models, 'RtpCreateDto')),
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/retrieve-the-status-of-a-payment-request
                 'rtpStatus' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -403,6 +417,7 @@ class MaibMiaDescription extends Description
                         'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ],
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/cancel-a-pending-payment-request
                 'rtpCancel' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -414,6 +429,7 @@ class MaibMiaDescription extends Description
                         'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ], self::getProperties($models, 'CancelDto')),
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/list-all-payment-requests
                 'rtpList' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'GET',
@@ -424,6 +440,7 @@ class MaibMiaDescription extends Description
                         'authToken' => $authorizationHeader,
                     ], self::getProperties($models, 'RtpListDto', 'query')),
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/initiate-a-refund-for-a-completed-payment
                 'rtpRefund' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -438,6 +455,7 @@ class MaibMiaDescription extends Description
                 #endregion
 
                 #region RTP Simulation Operations (Sandbox)
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-acceptance-of-a-payment-request
                 'rtpTestAccept' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
@@ -449,6 +467,7 @@ class MaibMiaDescription extends Description
                         'rtpId' => ['type' => 'string', 'location' => 'uri', 'required' => true],
                     ], self::getProperties($models, 'RtpTestAcceptDto')),
                 ],
+                // https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-rejection-of-a-payment-request
                 'rtpTestReject' => [
                     'extends' => 'baseOp',
                     'httpMethod' => 'POST',
