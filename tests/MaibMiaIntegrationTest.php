@@ -58,7 +58,7 @@ class MaibMiaIntegrationTest extends TestCase
     {
         $options = [
             'base_uri' => self::$baseUrl,
-            'timeout' => 15
+            'timeout' => 30
         ];
 
         #region Logging
