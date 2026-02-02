@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Maib\MaibMia;
 
 use GuzzleHttp\Client;
@@ -10,7 +12,9 @@ use GuzzleHttp\Command\Result;
 
 /**
  * maib MIA API client
+ *
  * @link https://docs.maibmerchants.md/mia-qr-api
+ * @link https://docs.maibmerchants.md/request-to-pay
  */
 class MaibMiaClient extends GuzzleClient
 {
@@ -19,265 +23,273 @@ class MaibMiaClient extends GuzzleClient
 
     public function __construct(?ClientInterface $client = null, ?DescriptionInterface $description = null, array $config = [])
     {
-        $client = $client ?? new Client();
+        $client      = $client ?? new Client();
         $description = $description ?? new MaibMiaDescription($config);
+
         parent::__construct($client, $description, null, null, null, $config);
     }
 
-    #region Auth
+    #region Authentication
     /**
      * Obtain Authentication Token
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/authentication/obtain-authentication-token
      * @link https://docs.maibmerchants.md/mia-qr-api/en/overview/general-technical-specifications#authentication
      */
     public function getToken(string $clientId, string $clientSecret): Result
     {
-        $args = [
+        $getTokenData = [
             'clientId' => $clientId,
             'clientSecret' => $clientSecret
         ];
 
-        return parent::getToken($args);
+        return parent::getToken($getTokenData);
     }
     #endregion
 
     #region QR
     /**
      * Create QR Code (Static, Dynamic)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-qr-code-static-dynamic
      */
     public function qrCreate(array $qrData, string $authToken): Result
     {
-        $args = $qrData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCreate($args);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::qrCreate($qrData);
     }
 
     /**
      * Create Hybrid QR Code
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code
      */
     public function qrCreateHybrid(array $qrData, string $authToken): Result
     {
-        $args = $qrData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCreateHybrid($args);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::qrCreateHybrid($qrData);
     }
 
     /**
      * Create Extension for QR Code by ID
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-initiation/create-hybrid-qr-code/create-extension-for-qr-code-by-id
      */
     public function qrCreateExtension(string $qrId, array $qrData, string $authToken): Result
     {
-        $args = $qrData;
-        $args['qrId'] = $qrId;
+        $qrData['qrId'] = $qrId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCreateExtension($args);
+        self::setBearerAuthToken($qrData, $authToken);
+        return parent::qrCreateExtension($qrData);
     }
 
     /**
      * Retrieve QR Details by ID
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-qr-details-by-id
      */
     public function qrDetails(string $qrId, string $authToken): Result
     {
-        $args = [
+        $qrDetailsData = [
             'qrId' => $qrId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrDetails($args);
+        self::setBearerAuthToken($qrDetailsData, $authToken);
+        return parent::qrDetails($qrDetailsData);
     }
 
     /**
      * Cancel Active QR (Static, Dynamic)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-static-dynamic
      */
     public function qrCancel(string $qrId, array $cancelData, string $authToken): Result
     {
-        $args = $cancelData;
-        $args['qrId'] = $qrId;
+        $cancelData['qrId'] = $qrId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCancel($args);
+        self::setBearerAuthToken($cancelData, $authToken);
+        return parent::qrCancel($cancelData);
     }
 
     /**
      * Cancel Active QR Extension (Hybrid)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-cancellation/cancel-active-qr-extension-hybrid
      */
     public function qrCancelExtension(string $qrId, array $cancelData, string $authToken): Result
     {
-        $args = $cancelData;
-        $args['qrId'] = $qrId;
+        $cancelData['qrId'] = $qrId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrCancelExtension($args);
+        self::setBearerAuthToken($cancelData, $authToken);
+        return parent::qrCancelExtension($cancelData);
     }
 
     /**
      * Display List of QR Codes with Filtering Options
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/display-list-of-qr-codes-with-filtering-options
      */
     public function qrList(array $qrListData, string $authToken): Result
     {
-        $args = $qrListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::qrList($args);
+        self::setBearerAuthToken($qrListData, $authToken);
+        return parent::qrList($qrListData);
     }
     #endregion
 
     #region Payment
     /**
      * Payment Simulation (Sandbox)
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/payment-simulation-sandbox
      */
     public function testPay(array $testPayData, string $authToken): Result
     {
-        $args = $testPayData;
-
-        self::setBearerAuthToken($args, $authToken);
-        return parent::testPay($args);
+        self::setBearerAuthToken($testPayData, $authToken);
+        return parent::testPay($testPayData);
     }
 
     /**
      * Retrieve Payment Details by ID
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-payment-details-by-id
      */
     public function paymentDetails(string $payId, string $authToken): Result
     {
-        $args = [
+        $paymentDetailsData = [
             'payId' => $payId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentDetails($args);
+        self::setBearerAuthToken($paymentDetailsData, $authToken);
+        return parent::paymentDetails($paymentDetailsData);
     }
 
     /**
      * Refund Completed Payment
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/payment-refund/refund-completed-payment
      */
     public function paymentRefund(string $payId, array $refundData, string $authToken): Result
     {
-        $args = $refundData;
-        $args['payId'] = $payId;
+        $refundData['payId'] = $payId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentRefund($args);
+        self::setBearerAuthToken($refundData, $authToken);
+        return parent::paymentRefund($refundData);
     }
 
     /**
      * Retrieve List of Payments with Filtering Options
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/endpoints/information-retrieval-get/retrieve-list-of-payments-with-filtering-options
      */
     public function paymentList(array $paymentListData, string $authToken): Result
     {
-        $args = $paymentListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::paymentList($args);
+        self::setBearerAuthToken($paymentListData, $authToken);
+        return parent::paymentList($paymentListData);
     }
     #endregion
 
     #region RTP
     /**
      * Create a new payment request (RTP)
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/create-a-new-payment-request-rtp
      */
     public function rtpCreate(array $rtpData, string $authToken): Result
     {
-        $args = $rtpData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpCreate($args);
+        self::setBearerAuthToken($rtpData, $authToken);
+        return parent::rtpCreate($rtpData);
     }
 
     /**
      * Retrieve the status of a payment request
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/retrieve-the-status-of-a-payment-request
      */
     public function rtpStatus(string $rtpId, string $authToken): Result
     {
-        $args = [
+        $rtpStatusData = [
             'rtpId' => $rtpId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpStatus($args);
+        self::setBearerAuthToken($rtpStatusData, $authToken);
+        return parent::rtpStatus($rtpStatusData);
     }
 
     /**
      * Cancel a pending payment request
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/cancel-a-pending-payment-request
      */
     public function rtpCancel(string $rtpId, array $cancelData, string $authToken): Result
     {
-        $args = $cancelData;
-        $args['rtpId'] = $rtpId;
+        $cancelData['rtpId'] = $rtpId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpCancel($args);
+        self::setBearerAuthToken($cancelData, $authToken);
+        return parent::rtpCancel($cancelData);
     }
 
     /**
      * List all payment requests
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/list-all-payment-requests
      */
     public function rtpList(array $rtpListData, string $authToken): Result
     {
-        $args = $rtpListData;
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpList($args);
+        self::setBearerAuthToken($rtpListData, $authToken);
+        return parent::rtpList($rtpListData);
     }
 
     /**
      * Initiate a refund for a completed payment
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/endpoints/initiate-a-refund-for-a-completed-payment
      */
     public function rtpRefund(string $payId, array $refundData, string $authToken): Result
     {
-        $args = $refundData;
-        $args['payId'] = $payId;
+        $refundData['payId'] = $payId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpRefund($args);
+        self::setBearerAuthToken($refundData, $authToken);
+        return parent::rtpRefund($refundData);
     }
 
     /**
      * Simulate acceptance of a payment request (Sandbox)
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-acceptance-of-a-payment-request
      */
     public function rtpTestAccept(string $rtpId, array $testAcceptData, string $authToken): Result
     {
-        $args = $testAcceptData;
-        $args['rtpId'] = $rtpId;
+        $testAcceptData['rtpId'] = $rtpId;
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpTestAccept($args);
+        self::setBearerAuthToken($testAcceptData, $authToken);
+        return parent::rtpTestAccept($testAcceptData);
     }
 
     /**
      * Simulate rejection of a payment request (Sandbox)
+     *
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/sandbox-simulation-environment/simulate-rejection-of-a-payment-request
      */
     public function rtpTestReject(string $rtpId, string $authToken): Result
     {
-        $args = [
+        $testRejectData = [
             'rtpId' => $rtpId,
         ];
 
-        self::setBearerAuthToken($args, $authToken);
-        return parent::rtpTestReject($args);
+        self::setBearerAuthToken($testRejectData, $authToken);
+        return parent::rtpTestReject($testRejectData);
     }
     #endregion
 
     #region Signature
     /**
      * Callback Payload Signature Key Verification
+     *
      * @param array $callbackData  Callback message parsed JSON object
      * @param string $signatureKey Merchant's shared secret key
+     *
      * @return bool True if signature is valid, false otherwise
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
@@ -285,7 +297,7 @@ class MaibMiaClient extends GuzzleClient
      */
     public static function validateCallbackSignature(array $callbackData, string $signatureKey): bool
     {
-        $resultData = $callbackData['result'] ?? [];
+        $resultData        = $callbackData['result'] ?? [];
         $callbackSignature = $callbackData['signature'] ?? '';
 
         // Validate required data exists
@@ -300,8 +312,10 @@ class MaibMiaClient extends GuzzleClient
 
     /**
      * Compute Payload Signature
+     *
      * @param array  $resultData The result data from callback payload
      * @param string $signatureKey Merchant's shared secret key
+     *
      * @link https://docs.maibmerchants.md/mia-qr-api/en/notifications-on-callback-url
      * @link https://docs.maibmerchants.md/mia-qr-api/en/examples/signature-key-verification
      * @link https://docs.maibmerchants.md/request-to-pay/api-reference/callback-notifications
@@ -317,9 +331,9 @@ class MaibMiaClient extends GuzzleClient
 
             // Format "amount" and "commission" with 2 decimal places
             if ($key === 'amount' || $key === 'commission') {
-                $valueStr = number_format((float)$value, 2, '.', '');
+                $valueStr = number_format(floatval($value), 2, '.', '');
             } else {
-                $valueStr = (string)$value;
+                $valueStr = strval($value);
             }
 
             if (trim($valueStr) !== '') {
@@ -332,17 +346,17 @@ class MaibMiaClient extends GuzzleClient
 
         // Build the string to hash
         $additionalString = implode(':', $keys);
-        $hashInput = $additionalString . ':' . $signatureKey;
+        $hashInput        = $additionalString . ':' . $signatureKey;
 
         // Generate SHA256 hash and base64-encode it
-        $hash = hash('sha256', $hashInput, true);
+        $hash   = hash('sha256', $hashInput, true);
         $result = base64_encode($hash);
 
         return $result;
     }
     #endregion
 
-    #region Util
+    #region Utility
     private static function setBearerAuthToken(array &$args, string $authToken)
     {
         $args['authToken'] = "Bearer $authToken";

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Maib\MaibMia\Tests;
 
 use Maib\MaibMia\MaibMiaClient;
-use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group integration
@@ -14,6 +16,7 @@ class MaibMiaIntegrationTest extends TestCase
     protected static $clientId;
     protected static $clientSecret;
     protected static $signatureKey;
+    protected static $callbackUrl;
     protected static $baseUrl;
 
     // Shared state
@@ -40,12 +43,13 @@ class MaibMiaIntegrationTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$clientId = getenv('MAIB_MIA_CLIENT_ID');
+        self::$clientId     = getenv('MAIB_MIA_CLIENT_ID');
         self::$clientSecret = getenv('MAIB_MIA_CLIENT_SECRET');
         self::$signatureKey = getenv('MAIB_MIA_SIGNATURE_KEY');
-        self::$baseUrl = MaibMiaClient::SANDBOX_BASE_URL;
+        self::$callbackUrl  = getenv('MAIB_MIA_CALLBACK_URL') ?: 'https://example.com';
+        self::$baseUrl      = MaibMiaClient::SANDBOX_BASE_URL;
 
-        if (!self::$clientId || !self::$clientSecret || !self::$signatureKey) {
+        if (empty(self::$clientId) || empty(self::$clientSecret) || empty(self::$signatureKey)) {
             self::markTestSkipped('Integration test credentials not provided.');
         }
     }
@@ -54,12 +58,12 @@ class MaibMiaIntegrationTest extends TestCase
     {
         $options = [
             'base_uri' => self::$baseUrl,
-            'timeout' => 15
+            'timeout' => 30
         ];
 
         #region Logging
-        $classParts = explode('\\', self::class);
-        $logName = end($classParts) . '_guzzle';
+        $classParts  = explode('\\', self::class);
+        $logName     = end($classParts) . '_guzzle';
         $logFileName = "$logName.log";
 
         $log = new \Monolog\Logger($logName);
@@ -71,7 +75,7 @@ class MaibMiaIntegrationTest extends TestCase
         $options['handler'] = $stack;
         #endregion
 
-        $this->client = new MaibMiaClient(new Client($options));
+        $this->client    = new MaibMiaClient(new Client($options));
         $this->expiresAt = (new \DateTime())->modify('+1 hour')->format('c');
     }
 
@@ -80,8 +84,8 @@ class MaibMiaIntegrationTest extends TestCase
         if ($this->isDebugMode()) {
             // https://github.com/guzzle/guzzle/issues/2185
             if ($t instanceof \GuzzleHttp\Command\Exception\CommandException) {
-                $response = $t->getResponse();
-                $responseBody = (string) $response->getBody();
+                $response         = $t->getResponse();
+                $responseBody     = !empty($response) ? strval($response->getBody()) : '';
                 $exceptionMessage = $t->getMessage();
 
                 $this->debugLog($responseBody, $exceptionMessage);
@@ -105,7 +109,7 @@ class MaibMiaIntegrationTest extends TestCase
 
     protected function assertResultOk($response)
     {
-        $this->assertNotNull($response);
+        $this->assertNotEmpty($response);
         $this->assertArrayHasKey('ok', $response);
         $this->assertTrue($response['ok']);
         $this->assertArrayHasKey('result', $response);
@@ -114,7 +118,7 @@ class MaibMiaIntegrationTest extends TestCase
 
     protected function assertResultNotOk($response)
     {
-        $this->assertNotNull($response);
+        $this->assertNotEmpty($response);
         $this->assertArrayHasKey('ok', $response);
         $this->assertFalse($response['ok']);
         $this->assertArrayHasKey('errors', $response);
@@ -146,8 +150,8 @@ class MaibMiaIntegrationTest extends TestCase
             'currency' => 'MDL',
             'orderId' => '123',
             'description' => 'Order #123',
-            'callbackUrl' => 'https://example.com/callback',
-            'redirectUrl' => 'https://example.com/success'
+            'callbackUrl' => self::$callbackUrl . '/callback',
+            'redirectUrl' => self::$callbackUrl . '/success'
         ];
 
         $response = $this->client->qrCreate($qrData, self::$accessToken);
@@ -156,8 +160,34 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertResultOk($response);
         $this->assertNotEmpty($response['result']['qrId']);
 
-        self::$qrId = $response['result']['qrId'];
+        self::$qrId   = $response['result']['qrId'];
         self::$qrData = $qrData;
+    }
+
+    /**
+     * @depends testAuthenticate
+     */
+    public function testQrCreateDynamicValidationError()
+    {
+        $qrData = [
+            'type' => 'Dynamic',
+            'expiresAt' => $this->expiresAt,
+            'amountType' => 'Fixed',
+            'amount' => 50.00,
+            'currencyABC' => 'MDL', // Invalid field
+            'callbackUrl' => self::$callbackUrl . '/callback',
+        ];
+
+        try {
+            $this->expectException(\GuzzleHttp\Command\Exception\CommandException::class);
+            $this->expectExceptionMessage('[currency] is a required string');
+
+            $response = $this->client->qrCreate($qrData, self::$accessToken);
+            $this->debugLog('qrCreate', $response);
+        } catch(\Exception $ex) {
+            $this->debugLog('qrCreate', $ex->getMessage());
+            throw $ex;
+        }
     }
 
     /**
@@ -174,8 +204,8 @@ class MaibMiaIntegrationTest extends TestCase
                 'amount' => 50.00,
                 'description' => 'Order #123',
                 'orderId' => '123',
-                'callbackUrl' => 'https://example.com/callback',
-                'redirectUrl' => 'https://example.com/success'
+                'callbackUrl' => self::$callbackUrl . '/callback',
+                'redirectUrl' => self::$callbackUrl . '/success'
             ]
         ];
 
@@ -186,9 +216,9 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertNotEmpty($response['result']['qrId']);
         $this->assertNotEmpty($response['result']['extensionId']);
 
-        self::$hybridQrId = $response['result']['qrId'];
+        self::$hybridQrId          = $response['result']['qrId'];
         self::$hybridQrExtensionId = $response['result']['extensionId'];
-        self::$hybridQrData = $hybridData;
+        self::$hybridQrData        = $hybridData;
     }
 
     /**
@@ -201,8 +231,8 @@ class MaibMiaIntegrationTest extends TestCase
             'amount' => 100.00,
             'description' => 'Updated Order #456 description',
             'orderId' => '456',
-            'callbackUrl' => 'https://example.com/callback',
-            'redirectUrl' => 'https://example.com/success'
+            'callbackUrl' => self::$callbackUrl . '/callback',
+            'redirectUrl' => self::$callbackUrl . '/success'
         ];
 
         $response = $this->client->qrCreateExtension(self::$hybridQrId, $extensionData, self::$accessToken);
@@ -333,7 +363,7 @@ class MaibMiaIntegrationTest extends TestCase
         $refundData = [
             'amount' => self::$qrData['amount'] / 2,
             'reason' => 'testPaymentRefundPartial reason',
-            'callbackUrl' => 'https://example.com/refund'
+            'callbackUrl' => self::$callbackUrl . '/refund'
         ];
 
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
@@ -351,7 +381,7 @@ class MaibMiaIntegrationTest extends TestCase
     {
         $refundData = [
             'reason' => 'testPaymentRefundFull reason',
-            'callbackUrl' => 'https://example.com/refund'
+            'callbackUrl' => self::$callbackUrl . '/refund'
         ];
 
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
@@ -371,7 +401,7 @@ class MaibMiaIntegrationTest extends TestCase
 
         $refundData = [
             'reason' => 'testRefundPaymentError reason',
-            'callbackUrl' => 'https://example.com/refund'
+            'callbackUrl' => self::$callbackUrl . '/refund'
         ];
 
         $response = $this->client->paymentRefund(self::$qrPayId, $refundData, self::$accessToken);
@@ -417,8 +447,8 @@ class MaibMiaIntegrationTest extends TestCase
             'description' => 'Invoice #123',
             'orderId' => '123',
             'terminalId' => 'P011111',
-            'callbackUrl' => 'https://example.com/callback',
-            'redirectUrl' => 'https://example.com/success'
+            'callbackUrl' => self::$callbackUrl . '/callback',
+            'redirectUrl' => self::$callbackUrl . '/success'
         ];
 
         $response = $this->client->rtpCreate($rtpData, self::$accessToken);
@@ -427,7 +457,7 @@ class MaibMiaIntegrationTest extends TestCase
         $this->assertResultOk($response);
         $this->assertNotEmpty($response['result']['rtpId']);
 
-        self::$rtpId = $response['result']['rtpId'];
+        self::$rtpId   = $response['result']['rtpId'];
         self::$rtpData = $rtpData;
     }
 
@@ -455,6 +485,7 @@ class MaibMiaIntegrationTest extends TestCase
             'sortBy' => 'createdAt',
             'order' => 'desc'
         ];
+
         $response = $this->client->rtpList($params, self::$accessToken);
         // $this->debugLog('rtpList', $response);
 
@@ -508,6 +539,7 @@ class MaibMiaIntegrationTest extends TestCase
         // $this->debugLog('rtpCreate', $response);
 
         $rtpId = $response['result']['rtpId'];
+
         $cancelData = [
             'reason' => 'testRtpCancel reason'
         ];

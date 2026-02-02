@@ -43,7 +43,7 @@ Initialize client:
 ```php
 $options = [
     'base_uri' => $MAIB_MIA_BASE_URI,
-    'timeout' => 15
+    'timeout' => 30
 ];
 
 if ($DEBUG) {
