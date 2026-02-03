@@ -127,8 +127,8 @@ class MaibMiaDescription extends Description
             'QrListDto' => [
                 'type' => 'object',
                 'properties' => [
-                    'count' => ['type' => 'number', 'required' => true],
-                    'offset' => ['type' => 'number', 'required' => true],
+                    'count' => ['type' => 'number'], // 'required' => true
+                    'offset' => ['type' => 'number'], // 'required' => true
                     'sortBy' => ['type' => 'string', 'enum' => ['orderId', 'type', 'amountType', 'status', 'createdAt', 'expiresAt']],
                     'order' => ['type' => 'string', 'enum' => ['asc', 'desc']],
                     'qrId' => ['type' => 'string'],
@@ -151,8 +151,8 @@ class MaibMiaDescription extends Description
             'PaymentListDto' => [
                 'type' => 'object',
                 'properties' => [
-                    'count' => ['type' => 'number', 'required' => true],
-                    'offset' => ['type' => 'number', 'required' => true],
+                    'count' => ['type' => 'number'], // 'required' => true
+                    'offset' => ['type' => 'number'], // 'required' => true
                     'sortBy' => ['type' => 'string', 'enum' => ['orderId', 'amount', 'status', 'executedAt']],
                     'order' => ['type' => 'string', 'enum' => ['asc', 'desc']],
                     'payId' => ['type' => 'string'],
@@ -201,8 +201,8 @@ class MaibMiaDescription extends Description
             'RtpListDto' => [
                 'type' => 'object',
                 'properties' => [
-                    'count' => ['type' => 'number', 'required' => true],
-                    'offset' => ['type' => 'number', 'required' => true],
+                    'count' => ['type' => 'number'], // 'required' => true
+                    'offset' => ['type' => 'number'], // 'required' => true
                     'sortBy' => ['type' => 'string', 'enum' => ['orderId', 'type', 'amount', 'status', 'createdAt', 'expiresAt']],
                     'order' => ['type' => 'string', 'enum' => ['asc', 'desc']],
                     'rtpId' => ['type' => 'string'],
