@@ -291,13 +291,13 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testAuthenticate
+     * @depends testQrCreateDynamic
      */
     public function testQrList()
     {
         $params = [
-            'count' => 10,
-            'offset' => 0,
+            // 'count' => 10,
+            // 'offset' => 0,
             'amountFrom' => 10.00,
             'amountTo' => 100.00,
             'sortBy' => 'createdAt',
@@ -417,8 +417,8 @@ class MaibMiaIntegrationTest extends TestCase
     public function testPaymentList()
     {
         $params = [
-            'count' => 10,
-            'offset' => 0,
+            // 'count' => 10,
+            // 'offset' => 0,
             'qrId' => self::$qrId,
             'sortBy' => 'executedAt',
             'order' => 'asc'
@@ -474,14 +474,17 @@ class MaibMiaIntegrationTest extends TestCase
     }
 
     /**
-     * @depends testAuthenticate
+     * @depends testRtpCreate
      */
     public function testRtpList()
     {
         $params = [
-            'count' => 10,
-            'offset' => 0,
-            'amount' => 10.00,
+            // 'count' => 10,
+            // 'offset' => 0,
+            // 'amount' => self::$rtpData['amount'],
+            'amountFrom' => 10.00,
+            'amountTo' => 100.00,
+            // 'rtpId' => self::$rtpId,
             'sortBy' => 'createdAt',
             'order' => 'desc'
         ];
